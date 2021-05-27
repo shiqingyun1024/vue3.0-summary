@@ -10,24 +10,40 @@
   </p>
 
   <button @click="state.count++">count is: {{ state.count }}</button>
+  <button>count is: {{ num }}</button>
   <p>
     Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
+    <code class="text">components/HelloWorld.vue</code> to test hot module replacement.
   </p>
 </template>
 
 <script setup>
-import { defineProps, reactive } from 'vue'
-
+import { defineProps, reactive, onMounted } from 'vue'
+const color = "red";
+const font = {
+  size:'3em'
+}
 defineProps({
   msg: String
 })
 
 const state = reactive({ count: 0 })
+ref:num=100;
+onMounted:{
+  num = 200;
+  console.log('挂载',num);
+}
 </script>
 
-<style scoped>
+<style>
+:root{
+  --varColor: yellowgreen;
+}
 a {
-  color: #42b983;
+  color: var(--varColor);
+}
+.text{
+  color: v-bind(color);
+  font-size: v-bind("font.size")
 }
 </style>
