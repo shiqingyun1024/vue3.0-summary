@@ -17,7 +17,7 @@
   </p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps, reactive, onMounted } from 'vue'
 const color = "red";
 const font = {
