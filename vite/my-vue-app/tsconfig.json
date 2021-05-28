@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      // 这样就可以对 `this` 上的数据属性进行更严格的推断
+      "strict": true,
+      "jsx": "preserve",
+      // 不允许隐式的any类型
+      "noImplicitAny": true,
+      // 不允许不明确类型的this,默认值是false
+      "noImplicitThis": false,
+      // 严格的检查空值
+      "strictNullChecks":true,
+      "moduleResolution": "node"
+    },
+    /*
+    “include” 用来指定哪些ts文件需要被编译
+             路径: ** 表示任意目录
+                   * 表示任意文件
+    */ 
+    "include":[
+        //  一个*表示的是任意文件，两个*表示的是任意目录
+         "src/**/*.ts",
+         "src/**/*.d.ts",
+         "src/**/*.vue"
+     ]
+
+  }
