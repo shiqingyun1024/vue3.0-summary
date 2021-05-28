@@ -11,7 +11,11 @@
       "noImplicitThis": false,
       // 严格的检查空值
       "strictNullChecks":true,
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "baseUrl":".",
+      "paths":{
+          "@/*":["src/*"]
+      }
     },
     /*
     “include” 用来指定哪些ts文件需要被编译
