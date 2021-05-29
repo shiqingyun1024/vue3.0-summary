@@ -4,6 +4,7 @@
 </template>
 
 <script setup lang="ts">
+// 简单的demo编写
 import { reactive, computed } from "vue"
 type DState = {
   count:number,
