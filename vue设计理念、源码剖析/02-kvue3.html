@@ -8,12 +8,20 @@
         // options就是传入的根组件的配置，就是一个对象
         createApp(options) {
             //   暴露给浏览器平台
-            const renderer = createRenderer()
+            const renderer = Vue.createRenderer({
+                querySelector(selector){
+                  return document.querySelector(selector)
+                },
+                insert(child,parent,anchor){
+                    // 如果没有传入anchor，就默认为null，这个时候insertBefore就相当于appendChild()方法
+                    parent.insertBefore(child,anchor || null)
+                }
+            })
             return renderer.createApp(options)
         },
 
         // 创建渲染器的函数
-        createRenderer({ querySelector }) {
+        createRenderer({ querySelector,insert }) {
             // 返回自定义渲染器
             return {
                 createApp(options) {
@@ -63,7 +71,7 @@
                             parent.innerHTML = ''
                             el.forEach(element => {
                                 // parent.appendChild(element)
-                                insert(el,parent,anchor)
+                                insert(element,parent)
                             });
                         },
                         // 编译，传入模板，然后对模板进行编译，得到渲染函数
@@ -71,8 +79,12 @@
                             return function render() {
                                 const h3 = document.createElement('h3')
                                 const p = document.createElement('p')
-                                h3.textContent = this.title,
+                                h3.textContent = this.title
                                     p.textContent = this.name
+                                    console.log(h3)
+                                    console.log(typeof h3)
+                                    console.log(p)
+                                    console.log(typeof p)
                                 return [h3, p]
                             }
                         }
