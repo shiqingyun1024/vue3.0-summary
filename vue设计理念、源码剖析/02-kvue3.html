@@ -7,32 +7,77 @@
     const Vue = {
         // options就是传入的根组件的配置，就是一个对象
         createApp(options) {
-            // 返回的就是app实例
+            //   暴露给浏览器平台
+            const renderer = createRenderer()
+            return renderer.createApp(options)
+        },
+
+        // 创建渲染器的函数
+        createRenderer({ querySelector }) {
+            // 返回自定义渲染器
             return {
-                mount(selector) {
-                    // mount的目标是什么？
-                    // 需要将组件配置解析为dom
-                    // 把得到的dom追加到宿主元素上去
-                    const parent = document.querySelector(selector)
-                    // 通过渲染函数把得到的dom追加到宿主元素上去
-                    // 通过render函数实现
-                    if(!options.render){
-                       options.render = this.compile(parent.innerHTML)
+                createApp(options) {
+                    // 返回的就是app实例
+                    return {
+                        mount(selector) {
+                            // mount的目标是什么？
+                            // 需要将组件配置解析为dom
+                            // 把得到的dom追加到宿主元素上去
+                            const parent = querySelector(selector)
+                            // 通过渲染函数把得到的dom追加到宿主元素上去
+                            // 通过render函数实现
+                            if (!options.render) {
+                                options.render = this.compile(parent.innerHTML)
+                            }
+
+                            // 兼容options api
+                            if (options.setup) {
+                                this.setupState = options.setup()
+                            } else {
+                                this.data = options.data()
+                            }
+
+                            // proxy 代理
+                            // 确定render中数据从哪获取
+                            this.proxy = new Proxy(this, {
+                                get(target, key) {
+                                    if (key in target.setupState) {
+                                        return target.setupState[key]
+                                    } else {
+                                        return target.data[key]
+                                    }
+                                },
+                                set(target, key, val) {
+                                    if (key in target.setupState) {
+                                        target.setupState[key] = val
+                                    } else {
+                                        target.data[key] = val
+                                    }
+                                }
+                            })
+                            console.log(this.proxy);
+
+
+                            const el = options.render.call(this.proxy)
+                            // 追加到宿主元素上去
+                            parent.innerHTML = ''
+                            el.forEach(element => {
+                                // parent.appendChild(element)
+                                insert(el,parent,anchor)
+                            });
+                        },
+                        // 编译，传入模板，然后对模板进行编译，得到渲染函数
+                        compile(template) {
+                            return function render() {
+                                const h3 = document.createElement('h3')
+                                const p = document.createElement('p')
+                                h3.textContent = this.title,
+                                    p.textContent = this.name
+                                return [h3, p]
+                            }
+                        }
                     }
 
-                    const el = options.render.call(options.data())
-                    // 追加到宿主元素上去
-                    parent.innerHTML = ''
-                    parent.appendChild(el)
-
-                },
-                // 编译，传入模板，然后对模板进行编译，得到渲染函数
-                compile(template){
-                    return function render(){
-                        const h3 = document.createElement('h3')
-                        h3.textContent = this.title
-                        return h3
-                    }
                 }
             }
         }
@@ -46,7 +91,7 @@
     // 4.复用性：composition api
     // 5.性能优化：响应式、编译期优化
     // 6.扩展性：自定义渲染器
-    const {createApp} = Vue
+    const { createApp } = Vue
     const app = createApp({
         data() {
             return {
@@ -55,7 +100,8 @@
         },
         setup() {
             return {
-                title: 'hello vue3'
+                title: 'hello vue3，努力',
+                name: '树立自己的目标'
             }
         }
     })
