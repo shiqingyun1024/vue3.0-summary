@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-// watch
+// inject
 import { defineComponent,inject,Ref,watchEffect} from "vue"
 export default defineComponent({
   name:"child",
