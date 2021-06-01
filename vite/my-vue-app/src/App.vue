@@ -2,13 +2,13 @@
   <img alt="Vue logo" src="./assets/vite.jpeg" />
   <!-- <HelloWorld2 msg="Hello Vue 3 + Vite" /> -->
   <!-- <HelloWorld3 /> -->
-  <HelloWorld5 />
+  <HelloWorld6 />
 </template>
 
 <script setup lang="ts">
 // import HelloWorld3 from './components/HelloWorld3.vue'
 // import HelloWorld4 from './components/HelloWorld4.vue'
-import HelloWorld5 from './components/HelloWorld5.vue'
+import HelloWorld6 from './components/HelloWorld6.vue'
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
