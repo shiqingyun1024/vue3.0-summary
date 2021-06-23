@@ -1,15 +1,13 @@
 <template>
-  <div class="main">
-    
-  </div>
+  <div class="main"></div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
-    name:'NativeMain'
-})
+  name: "NativeMain",
+  setup() {}
+});
 </script>
 <style scoped lang="scss">
-
 </style>
