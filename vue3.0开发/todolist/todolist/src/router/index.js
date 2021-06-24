@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Start from '../views/Start.vue'
 
 // 路由的配置
 // path：路由路径 必须以/开头  url跳转时的路径  必填的属性
@@ -9,8 +9,18 @@ const routes = [
   //  /代表首页，所以需要把Home组件引入进来，其他的路由组件可以按需加载（节省首屏加载时间，按需加载，节省了性能）。
   {
     path: '/',
+    name: 'Start',
+    component: Start
+  },
+  {
+    path: '/Home',
     name: 'Home',
-    component: Home
+    // 懒加载，也可以称之为按需加载
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // webpackChunkName: "about"指的是这个组件被打包之后的名字
+    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
   },
   {
     path: '/about',
