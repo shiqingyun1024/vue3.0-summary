@@ -14,6 +14,7 @@ import NativeHeader from "@/components/nativeHeader/NativeHeader.vue";
 import NativeMain from "@/components/nativeMain/NativeMain.vue";
 import NativeFooter from "@/components/nativeFooter/NativeFooter.vue";
 import { defineComponent, ref, computed } from "vue";
+import { useStore } from "vuex"
 
 export default defineComponent({
   name: "Home",
@@ -23,6 +24,11 @@ export default defineComponent({
     NativeFooter
   },
   setup() {
+    let store = useStore()
+    let list = computed(()=>{
+      return store.state.list
+    })
+
     let num1 = ref(10);
     let num2 = ref(20);
     let addNum = computed(() => {
