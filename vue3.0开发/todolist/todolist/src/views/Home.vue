@@ -14,7 +14,8 @@ import NativeHeader from "@/components/nativeHeader/NativeHeader.vue";
 import NativeMain from "@/components/nativeMain/NativeMain.vue";
 import NativeFooter from "@/components/nativeFooter/NativeFooter.vue";
 import { defineComponent, ref, computed } from "vue";
-import { useStore } from "vuex"
+import { useStore } from "vuex" // 内置的hooks函数
+import { useRouter } from "vue-router" // 内置的hooks函数
 
 export default defineComponent({
   name: "Home",
@@ -28,6 +29,17 @@ export default defineComponent({
     let list = computed(()=>{
       return store.state.list
     })
+
+    let router = useRouter()
+    // 跳转路由
+    // push函数里面可以传入跳转的路径
+    // back：回退到上一页
+    // forward：去到下一页
+    // go(整数) 正数代表前进，负数代表后退
+    // router.push('/about')
+    // router.push({
+    //   path:'/about'
+    // })
 
     let num1 = ref(10);
     let num2 = ref(20);
