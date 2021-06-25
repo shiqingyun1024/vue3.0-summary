@@ -15,7 +15,7 @@ import NativeMain from "@/components/nativeMain/NativeMain.vue";
 import NativeFooter from "@/components/nativeFooter/NativeFooter.vue";
 import { defineComponent, ref, computed } from "vue";
 import { useStore } from "vuex" // 内置的hooks函数
-import { useRouter } from "vue-router" // 内置的hooks函数
+import { useRouter, useRoute} from "vue-router" // 内置的hooks函数
 
 export default defineComponent({
   name: "Home",
@@ -29,8 +29,15 @@ export default defineComponent({
     let list = computed(()=>{
       return store.state.list
     })
-
+     // router是全局路由对象
     let router = useRouter()
+    // route是当前组件路由对象
+    let route = useRoute()
+    console.log(route.query);
+    // query传递过来的参数都是字符串的类型
+    console.log(typeof route.query.num);
+    
+    
     // 跳转路由
     // push函数里面可以传入跳转的路径
     // back：回退到上一页
