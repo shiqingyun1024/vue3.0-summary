@@ -21,7 +21,8 @@ export default defineComponent({
       })
       let start = ()=>{
         //   router.push('/Home')
-        // push 如果是传的对象的形式 就可以传递参数
+        // push 如果是传的对象的形式 就可以传递参数，query传参可以用path或者name（路由中定义的），在url中会显示参数。
+        // 但是params传参只能用name，而且不会在传递的url中显示。
           router.push({
               path:'/Home',
               query:{
