@@ -23,6 +23,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
   },
   {
+    path: '/Detail',
+    name: 'Detail',
+    // 懒加载，也可以称之为按需加载
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // webpackChunkName: "about"指的是这个组件被打包之后的名字
+    component: () => import(/* webpackChunkName: "about" */ '../views/Detail.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     // 懒加载，也可以称之为按需加载
