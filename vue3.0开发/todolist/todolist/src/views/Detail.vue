@@ -1,7 +1,7 @@
 <template>
 <div class="detail">
   <h3>这是detail组件</h3>
-  <child :msg="msg"></child>
+  <child :msg="msg" @send="send"></child>
 </div>
 </template>
 <script>
@@ -14,8 +14,12 @@ export default defineComponent({
     },
     setup(){
         let msg = ref('这是父组件的数据')
+        let send = (value)=>{
+           console.log(value);
+        }
         return{
-            msg
+            msg,
+            send
         }
 
     }
