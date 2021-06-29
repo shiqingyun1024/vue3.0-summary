@@ -1,7 +1,7 @@
 <template>
 <div class="detail">
   <h3>这是detail组件</h3>
-  <child></child>
+  <child :msg="msg"></child>
 </div>
 </template>
 <script>
@@ -13,6 +13,10 @@ export default defineComponent({
        child
     },
     setup(){
+        let msg = ref('这是父组件的数据')
+        return{
+            msg
+        }
 
     }
 
