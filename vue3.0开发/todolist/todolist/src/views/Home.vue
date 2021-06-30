@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <NativeHeader @add="add"></NativeHeader>
-    <NativeMain></NativeMain>
+    <NativeMain :list="list"></NativeMain>
     <NativeFooter></NativeFooter>
   </div>
 </template>
@@ -22,11 +22,16 @@ export default defineComponent({
     NativeFooter
   },
   setup() {
+    let store = new useStore();
+    let list = store.state.list
     let add = value => {
+      store.commit('addTodo',{title:value,complete:false})
       console.log(value);
     };
     return {
-      add
+      add,
+      store,
+      list
     };
   }
 });

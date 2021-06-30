@@ -8,21 +8,15 @@
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "NativeMain",
-  setup() {
-    let list = [
-      {
-        title:'吃饭',
-        complete:false
-      },
-      {
-        title:'睡觉',
-        complete:false
-      },
-      {
-        title:'写代码',
-        complete:false
-      }
-    ]
+  props:{
+    list:{
+      type:Array,
+      default:[],
+      required:true
+    }
+  },
+  setup(props) {
+    let list = props.list
     return {
       list
     }
