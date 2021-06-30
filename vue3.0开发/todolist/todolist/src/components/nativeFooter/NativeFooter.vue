@@ -1,5 +1,7 @@
 <template>
-  <div class="footer"></div>
+  <div class="footer">
+    <p>已完成1 / 全部4  <button>清除已完成</button></p>
+  </div>
 </template>
 
 <script>
@@ -10,4 +12,9 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+.footer{
+  p{
+    text-align: left;
+  }
+}
 </style>

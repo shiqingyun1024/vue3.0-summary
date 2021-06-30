@@ -1,5 +1,7 @@
 <template>
-  <div class="header"></div>
+  <div class="header">
+    <input type="text" placeholder="请输入要做的内容">
+  </div>
 </template>
 
 <script>
@@ -10,4 +12,12 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+.header{
+  input{
+    display: block;
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+  }
+}
 </style>
