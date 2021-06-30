@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <NativeHeader></NativeHeader>
+    <NativeHeader @add="add"></NativeHeader>
     <NativeMain></NativeMain>
     <NativeFooter></NativeFooter>
   </div>
@@ -22,12 +22,17 @@ export default defineComponent({
     NativeFooter
   },
   setup() {
-    return {};
+    let add = value => {
+      console.log(value);
+    };
+    return {
+      add
+    };
   }
 });
 </script>
 <style scoped lang="scss">
-.home{
+.home {
   margin-top: 100px;
   margin-left: calc(50% - 80px);
 }
