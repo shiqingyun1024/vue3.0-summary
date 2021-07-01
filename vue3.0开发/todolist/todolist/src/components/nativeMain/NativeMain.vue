@@ -1,11 +1,14 @@
 <template>
-  <div class="main">
+  <div class="main" v-if="list.length >0">
     <p v-for="(item,index) in list" :key="index"><input type="checkbox" name="item" v-model="item.complete"><label>{{item.title}}</label> <button v-if="item.complete" @click="deleteItem(index)">删除</button></p>
+  </div>
+  <div class="no-task" v-else>
+    暂且无任务
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent,computed } from "vue";
 export default defineComponent({
   name: "NativeMain",
   props:{
@@ -16,7 +19,9 @@ export default defineComponent({
     }
   },
   setup(props,context) {
-    let list = props.list;
+    let list = computed(()=>{
+      return props.list;
+    })
     let deleteItem = (index)=>{
       console.log(index);
       context.emit('deleteItem',index)
@@ -49,5 +54,9 @@ export default defineComponent({
        }
     }
   }
+}
+.no-task{
+  text-align: left;
+  margin-top: 20px;
 }
 </style>

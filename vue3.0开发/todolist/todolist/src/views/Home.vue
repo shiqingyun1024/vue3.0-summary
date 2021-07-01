@@ -23,10 +23,12 @@ export default defineComponent({
   },
   setup() {
     let store = new useStore();
-    let list = store.state.list
+    let list = computed(()=>{
+      return store.state.list
+    })
     let add = value => {
       let flag = true;
-      list.forEach(item=>{
+      list.value.forEach(item=>{
         if(item.title === value){
             alert('任务已存在')
             flag = false

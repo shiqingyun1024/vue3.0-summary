@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <p>已完成{{completeCount}} / 全部{{allCount}}  <button @click="clear">清除已完成</button></p>
+    <p>已完成{{completeCount}} / 全部{{allCount}}  <button v-if="completeCount>0" @click="clear">清除已完成</button></p>
   </div>
 </template>
 
