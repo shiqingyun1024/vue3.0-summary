@@ -25,16 +25,22 @@ export default defineComponent({
     let store = new useStore();
     let list = store.state.list
     let add = value => {
-      store.commit('addTodo',{title:value,complete:false})
-      console.log(value);
+      let flag = true;
+      list.forEach(item=>{
+        if(item.title === value){
+            alert('任务已存在')
+            flag = false
+        }
+      })
+      flag?store.commit('addTodo',{title:value,complete:false}):''
     };
     let deleteMainItem = (index)=>{
       console.log(index);
        store.commit('delTodo',index)
     }
-    let clear = ()=>{
-      let notCompleteList = list.filter(item=>!item.complete)
-      store.commit('clear',notCompleteList)
+    let clear = (val)=>{
+      console.log('父清空');
+      store.commit('clear',val)
     }
     return {
       add,

@@ -28,7 +28,10 @@ export default createStore({
     },
     // 清空已完成任务
     clear(state, payload){
+      console.log(payload);
       state.list = payload
+      console.log('变更');
+      console.log(state.list);
     }
   },
   actions: {

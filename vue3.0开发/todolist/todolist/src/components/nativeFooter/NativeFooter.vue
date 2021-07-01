@@ -22,10 +22,13 @@ export default defineComponent({
       })
       return list.length
     })
-    let allCount = ref('')
-    allCount = props.list.length
+    let allCount = computed(()=>{
+      return props.list.length
+    })
     let clear = ()=>{
-       context.emit('clear')
+      console.log('子清空');
+      let notCompleteList = props.list.filter(item=>!item.complete)
+       context.emit('clear',notCompleteList)
     }
     return {
       completeCount,
