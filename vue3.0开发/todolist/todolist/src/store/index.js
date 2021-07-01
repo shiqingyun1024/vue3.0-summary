@@ -13,7 +13,7 @@ export default createStore({
       },
       {
         title:'写代码',
-        complete:false
+        complete:true
       }
     ]
   },

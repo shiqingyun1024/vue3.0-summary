@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <NativeHeader @add="add"></NativeHeader>
-    <NativeMain :list="list"></NativeMain>
-    <NativeFooter></NativeFooter>
+    <NativeMain :list="list" @deleteItem="deleteMainItem"></NativeMain>
+    <NativeFooter :list="list" @clear="clear"></NativeFooter>
   </div>
 </template>
 
@@ -28,10 +28,20 @@ export default defineComponent({
       store.commit('addTodo',{title:value,complete:false})
       console.log(value);
     };
+    let deleteMainItem = (index)=>{
+      console.log(index);
+       store.commit('delTodo',index)
+    }
+    let clear = ()=>{
+      let notCompleteList = list.filter(item=>!item.complete)
+      store.commit('clear',notCompleteList)
+    }
     return {
       add,
       store,
-      list
+      list,
+      deleteMainItem,
+      clear
     };
   }
 });

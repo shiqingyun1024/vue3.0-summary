@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <p v-for="(item,index) in list"><input type="checkbox" name="item"><label>{{item.title}}</label> <button>删除</button></p>
+    <p v-for="(item,index) in list" :key="index"><input type="checkbox" name="item" v-model="item.complete"><label>{{item.title}}</label> <button v-if="item.complete" @click="deleteItem(index)">删除</button></p>
   </div>
 </template>
 
@@ -15,10 +15,15 @@ export default defineComponent({
       required:true
     }
   },
-  setup(props) {
-    let list = props.list
+  setup(props,context) {
+    let list = props.list;
+    let deleteItem = (index)=>{
+      console.log(index);
+      context.emit('deleteItem',index)
+    }
     return {
-      list
+      list,
+      deleteItem
     }
   }
 });
