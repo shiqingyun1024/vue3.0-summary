@@ -1,5 +1,5 @@
 <template>
-  <div class="list" v-loading>
+  <div class="list" v-loading="loading">
     <ul >
       <li v-for="(item,index) in datalist" :key="index">{{item}}</li>
     </ul>
@@ -18,9 +18,9 @@ export default {
       }  
     }
   },
-  data(){
-      return{
-        // list:datalist
+  computed:{
+      loading(){
+          return this.datalist.length
       }
   }
 };
