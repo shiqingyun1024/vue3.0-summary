@@ -30,5 +30,37 @@ vue3.0相关的总结
 .
 .
 ```
+### 指令
+```
+对象或数组默认值必须从一个工厂函数获取
+props: {
+    // 必填的字符串
+    propC: {
+      type: String,
+      required: true
+    },
+    // 带有默认值的数字
+    propD: {
+      type: Number,
+      default: 100
+    },
+    // 带有默认值的对象
+    propE: {
+      type: Object,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function () {
+        return { message: 'hello' }
+      }
+    },
+    // 带有默认值的对象
+    propE: {
+      type: Array,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function () {
+        return []
+      }
+    },
+  }
+```
 
 

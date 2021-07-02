@@ -1,7 +1,7 @@
 <template>
   <div class="list" v-loading>
-    <ul v-for="item in datalist">
-      <li>{{item}}</li>
+    <ul >
+      <li v-for="(item,index) in datalist" :key="index">{{item}}</li>
     </ul>
   </div>
 </template>
@@ -12,8 +12,16 @@ export default {
   props: {
     datalist: {
       type: Array,
-      default: []
+      // vue规定，对象或数组默认值必须是从一个工厂函数获取。
+      default:()=>{
+          return []
+      }  
     }
+  },
+  data(){
+      return{
+        // list:datalist
+      }
   }
 };
 </script>
