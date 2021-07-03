@@ -22,6 +22,9 @@ export default {
       loading(){
           return this.datalist.length
       }
+  },
+  mounted(){
+      console.log(this.loading);
   }
 };
 </script>

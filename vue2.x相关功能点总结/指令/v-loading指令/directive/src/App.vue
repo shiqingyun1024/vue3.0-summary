@@ -13,7 +13,8 @@ export default {
   },
   data(){
     return {
-      datalist:[
+      datalist:[],
+      datalist2:[
         '有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令',
         '有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令',
         '有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令',
@@ -32,6 +33,11 @@ export default {
         '有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令',
       ]
     }
+  },
+  mounted(){
+     setTimeout(()=>{
+       this.datalist = this.datalist2
+     },2000)
   },
   methods:{
 
