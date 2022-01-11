@@ -341,7 +341,21 @@ setup (props) {
     // 更新’prop.user‘到’user.value‘访问引用值
     repositories.value = await fetchUserRepositories(user.value) // 原先传入的值为props.user
   }
+  
+  // vue暴露出来的生命周期钩子函数
+  onMounted(getUserRepositories)
+
+  // 在user prop的响应式引用上设置一个侦听器
+  watch(user,getUserRepositories)
+
+  return {
+    repositories,
+    getUserRepositories
+  }
 }
+
+你可能已经注意到我们的setup的顶部使用了toRefs。这是为了确保我们的侦听器能够根据user prop的变化做出反应。
+有了这些变化，我们就把第一个逻辑关注点移到了一个地方。
 
 ```
 
