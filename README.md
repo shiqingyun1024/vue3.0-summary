@@ -355,7 +355,21 @@ setup (props) {
 }
 
 你可能已经注意到我们的setup的顶部使用了toRefs。这是为了确保我们的侦听器能够根据user prop的变化做出反应。
-有了这些变化，我们就把第一个逻辑关注点移到了一个地方。
+
+有了这些变化，我们就把第一个逻辑关注点移到了一个地方。我们现在可以对第二个关注点执行相同的操作---基于searchQuery进行过滤，
+这次是使用计算属性。
+
+## 独立的 computed 属性
+与ref和watch类似，也可以使用从Vue导入的computed函数在Vue组件外部创建计算属性。
+让我们回到counter的例子：
+import { ref,computed } from 'vue'
+
+const counter = ref(0)
+const twiceTheCounter = computed(() => counter.value * 2)
+
+counter.value++
+console.log(counter.value) // 1
+console.log(twiceTheCounter.value) // 2
 
 ```
 
