@@ -369,7 +369,10 @@ const twiceTheCounter = computed(() => counter.value * 2)
 
 counter.value++
 console.log(counter.value) // 1
-console.log(twiceTheCounter.value) // 2
+console.log(twiceTheCounter.value) // 2  **注意点：使用computed计算属性返回的值要用value。
+
+这里我们给computed函数传递了第一个参数，它是一个类似getter的回调函数，输出的是一个只读的
+响应式引用（**注意点**）。为了访问新创建的计算变量value，我们需要像ref一样使用.value property （**注意点**）
 
 ```
 
