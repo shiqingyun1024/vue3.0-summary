@@ -329,7 +329,19 @@ export default {
 现在我们将其应用到我们的示例中：
 // src/components/UserRepositories.vue `setup` function
 import { fetchUserRepositories } from '@/api/repositories'
+import { ref, onMounted, watch, toRefs } from 'vue'
 
+// 在我们组件中
+setup (props) {
+  // 使用'toRefs'创建对’props‘中的’user‘property的响应式引用
+  const { user } = toRefs(props)
+
+  const repositories = ref([])
+  const getUserRepositories = async () => {
+    // 更新’prop.user‘到’user.value‘访问引用值
+    repositories.value = await fetchUserRepositories(user.value) // 原先传入的值为props.user
+  }
+}
 
 ```
 
