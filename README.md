@@ -296,8 +296,28 @@ setup (props) {
 import { ref, watch } from 'vue'
 const counter = ref(0)
 watch(counter,(newValue,oldValue)=>{
-    console.log('The new counter value is:')
+    console.log('The new counter value is:' + counter.value)
 })
+每当 counter 被修改时，例如 counter.value=5，侦听将触发并执行回调（第二个参数），在本例中，
+它将把'The new counter value is:5' 记录到控制台中。
+以下是等效的选项式API：
+export default {
+    data() {
+        return {
+            counter:0
+        }
+    },
+    watch: {
+        counter(newValue,oldValue){
+            console.log('The new counter value is:' + this.counter)
+        }
+    }
+}
+有关watch的详细信息，请参阅深入指南。
+
+现在我们将其应用到我们的示例中：
+// src/components/UserRepositories.vue `setup` function
+import { fetchUserRepositories } from '@/api/repositories'
 
 
 ```
