@@ -484,8 +484,17 @@ export default {
     return {
       filters: {...}, // 3
     }
+  },
+  computed:{
+    filteredRepositories() {...}, // 3
+  },
+  methods: {
+    updateFilters(){...}, // 3
   }
 }
+
+此时，你可能已经知道了其中的奥妙，所以让我们跳到最后，迁移剩余的过滤功能。我们不需要深入了解
+实现细节，因为这并不是本指南的重点。
 
 
 ```
