@@ -433,6 +433,19 @@ export default function useUserRepositories(user) {
   }
 }
 
+然后是搜索功能
+// src/composables/useRepositoryNameSearch.js
+import { ref, computed } from 'vue'
+
+export default function useRepositoryNameSearch(repositories) {
+   const searchQuery = ref('')
+   const repositoriesMatchingSearchQuery = computed(()=>{
+     return repositories.value.filter(repository=>{
+       return repository.name.includes(searchQuery.value)
+     })
+   })
+}
+
 ```
 
 #### 组合式 API 基础
