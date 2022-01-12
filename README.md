@@ -496,6 +496,51 @@ export default {
 此时，你可能已经知道了其中的奥妙，所以让我们跳到最后，迁移剩余的过滤功能。我们不需要深入了解
 实现细节，因为这并不是本指南的重点。
 
+// src/components/UserRepositories.vue
+import { toRefs } from 'vue'
+import useUserRepositories from '@/composables/useUserRepositories'
+import useRepositoryNameSearch from '@/composables/useRepositoryNameSearch'
+import useRepositoryFilters from '@/composables/useRepositoryFilters'
+
+export default {
+  components: { RepositoriesFilters, RepositoriesSortBy, RepositoriesList },
+  props: {
+    user: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const { user } = toRefs(props)
+
+    const { repositories, getUserRepositories } = useUserRepositories(user)
+
+    const {
+      searchQuery,
+      repositoriesMatchingSearchQuery
+    } = useRepositoryNameSearch(repositories)
+
+    const {
+      filters,
+      updateFilters,
+      filteredRepositories
+    } = useRepositoryFilters(repositoriesMatchingSearchQuery)
+
+    return {
+      // 因为我们并不关心未经过滤的仓库
+      // 我们可以在 `repositories` 名称下暴露过滤后的结果
+      repositories: filteredRepositories,
+      getUserRepositories,
+      searchQuery,
+      filters,
+      updateFilters
+    }
+  }
+}
+
+我们完成了！
+
+请记住，我们只触及了组合式 API 的表面以及它允许我们做什么。要了解更多信息，请参阅深入指南。
 
 ```
 
