@@ -386,9 +386,38 @@ setup (props) {
 
   const repositories = ref([])
   const getUserRepositories = async () => {
-    // 
+    // 更新’props.user‘到’user.value‘访问引用值
+    repositories.value = await fetchUserRepositories(user.value)
+  }
+
+  // onMounted这个钩子函数是从vue中导出的方法，所以可以直接使用。
+  onMounted(getUserRepositories)
+
+  // 在user prop的响应式引用上设置一个侦听器
+  watch(user,getUserRepositories)
+
+  const searchQuery = ref('')
+  const repositoriesMatchingSearchQuery = computed(() => {
+     return repositories.value.filter(
+        repository => repository.name.includes(searchQuery.value)
+     )
+  })
+
+  return {
+    repositories,
+    getUserRepositories,
+    searchQuery,
+    repositoriesMatchingSearchQuery
   }
 }
+
+对于其他的逻辑关注点我们也可以做，但是你可能已经在问这个问题了----这不就是把代码移到
+setup 选项并使它变得非常大吗？嗯，确实是这样的。这就是为什么我们要在继续其他任务之前，我们
+首先要将上述代码提取到一个独立的组合式函数中。让我们从创建 useUserRepositories函数开始：
+// src/composables/useUserRepositories.js
+import { fetchUserRepositories } from '@/api/repositories'
+import { ref, onMounted, watch } from 'vue'
+
 
 ```
 
