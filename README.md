@@ -469,6 +469,21 @@ export default {
     const { user } = toRefs(props)
 
     const { repositories,getUserRepositories } = useUserRepositories(user)
+
+    const { searchQuery, repositoriesMatchingSearchQuery} = useRepositoryNameSearch(repositories)
+
+    return {
+      // 因为我们并不关心未经过滤的仓库
+      // 我们可以在’repositories‘名称下暴露过滤后的结果
+      repositories:repositoriesMatchingSearchQuery,
+      getUserRepositories,
+      searchQuery
+    }
+  },
+  data (){
+    return {
+      filters: {...}, // 3
+    }
   }
 }
 
