@@ -444,7 +444,34 @@ export default function useRepositoryNameSearch(repositories) {
        return repository.name.includes(searchQuery.value)
      })
    })
+
+   return {
+     searchQuery,
+     repositoriesMatchingSearchQuery
+   }
 }
+
+现在我们有了两个单独的功能模块，接下来就可以开始在组件中使用它们了。以下是如何做到这一点：
+// src/components/UserRepositories.vue
+import useUserRepositories from '@/composables/useUserRepositories'
+import useRepositoryNameSearch from '@/composables/useRepositoryNameSearch'
+import { toRefs } from 'vue'
+
+export default {
+  components: { RepositoriesFilters, RepositoriesSortBy, RepositoriesList },
+  props: {
+    user: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props){
+    const { user } = toRefs(props)
+
+    const { repositories,getUserRepositories } = useUserRepositories(user)
+  }
+}
+
 
 ```
 
