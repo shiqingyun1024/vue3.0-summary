@@ -418,6 +418,20 @@ setup 选项并使它变得非常大吗？嗯，确实是这样的。这就是�
 import { fetchUserRepositories } from '@/api/repositories'
 import { ref, onMounted, watch } from 'vue'
 
+export default function useUserRepositories(user) {
+  const repositories = ref([])
+  const getUserRepositories = async () => {
+    repositories.value = await fetchUserRepositories(user.value)
+  }
+
+  onMounted(getUserRepositories)
+  watch(user,getUserRepositories)
+
+  return {
+    repositories,
+    getUserRepositories
+  }
+}
 
 ```
 
