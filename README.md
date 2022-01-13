@@ -616,7 +616,16 @@ property就都可以在模板中访问到：
       props: {
         collectionName: String
       },
-      
+      setup(props){
+        const readersNumber = ref(0)
+        const book = reactive({title:'Vue 3 Guide'})
+
+        // 暴露给 template
+        return {
+          readersNumber,
+          book
+        }
+      }
     }
 </script>
 
