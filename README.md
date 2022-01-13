@@ -598,6 +598,28 @@ onBeforeUpdate生命周期钩子中执行此操作。
 - methods
 - refs（模板ref）
 
+**注意点：这个时候要注意生命周期钩子函数执行的顺序。**
+
+## 结合模板使用
+
+如果setup返回一个对象，那么该对象的property以及传递给setup的props参数中的
+property就都可以在模板中访问到：
+
+<!-- MyBook.vue -->
+<template>
+  <div>{{collectionName}}: {{readersNumber}} {{book.title}}</div>
+</template>
+<script>
+    import { ref, reactive } from 'vue'
+
+    export default {
+      props: {
+        collectionName: String
+      },
+      
+    }
+</script>
+
 ```
 #### 组合式 API 基础
 
