@@ -639,9 +639,13 @@ import { h, ref, reactive } from 'vue'
 
 export default {
   setup() {
-    
+    const readersNumber = ref(0)
+    const book = reactive({ title: 'Vue 3 Guide'})
+    // 请注意这里我们需要显示使用ref的value
+    return () => h('div', [readersNumber.value, book.title])
   }
 }
+**注意点：关于渲染函数h里面的写法，目前我还不熟悉，需要好好梳理一下。**
 
 ```
 #### 组合式 API 基础
