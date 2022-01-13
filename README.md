@@ -632,7 +632,17 @@ property就都可以在模板中访问到：
 注意，从setup返回的refs在模板中访问时是被自动浅解包的，因此不应在模板中使用.value
 
 ## 使用渲染函数
-setup
+setup 还可以返回一个渲染函数，该函数可以直接使用在同一作用域中声明的响应式状态：
+
+// MyBook.vue
+import { h, ref, reactive } from 'vue'
+
+export default {
+  setup() {
+    
+  }
+}
+
 ```
 #### 组合式 API 基础
 
