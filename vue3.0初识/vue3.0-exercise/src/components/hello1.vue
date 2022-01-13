@@ -9,7 +9,7 @@
     props: {
       collectionName: String
     },
-    setup(props) {
+    setup(props:any) {
       const readersNumber = ref(0)
       const book = reactive({ title: 'Vue 3 Guide' })
 
