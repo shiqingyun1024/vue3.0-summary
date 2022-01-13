@@ -584,6 +584,20 @@ onBeforeUpdate生命周期钩子中执行此操作。
 
 我们将在稍后解释expose所扮演的角色。
 
+## 访问组件的property
+
+执行setup时，组件实例尚未被创建。因此，你只能访问以下property：
+- props
+- attrs
+- slots
+- emit
+
+换句话说，你将无法访问以下组件选项：
+- data
+- computed
+- methods
+- refs（模板ref）
+
 ```
 #### 组合式 API 基础
 
