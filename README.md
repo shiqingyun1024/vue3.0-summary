@@ -570,6 +570,20 @@ export default {
 context是一个普通的JavaScript对象，也就是说，它不是响应式的，这意味着你可以安全地对
 context使用ES6解构。
 
+// MyBook.vue
+export default {
+  setup(props, {attrs, slots, emit, expose}){
+
+  }
+}
+
+attrs和slots是有状态的对象，它们总是会随组件本身的更新而更新。这意味着你应该避免对它们
+进行解构，并始终以attrs.x或slots.x的方式引用property。请注意，与props不同，attrs和
+slots的property是非响应式的。如果你打算根据attrs或者slots的更改应用副作用，那么应该在
+onBeforeUpdate生命周期钩子中执行此操作。
+
+我们将在稍后解释expose所扮演的角色。
+
 ```
 #### 组合式 API 基础
 
