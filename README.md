@@ -546,6 +546,19 @@ export default {
 
 #### Setup
 ```
+## Context
+传递给setup函数的第二个参数是context。context是一个普通JavaScript对象，暴露了其它
+可能在setup中有用的值：
+
+// MyBook.vue
+export default {
+  setup(props,context) {
+    // Attribute (非响应式对象，等同于$attrs)
+    console.log(context.slots)
+
+    // 
+  }
+}
 ```
 #### 组合式 API 基础
 
