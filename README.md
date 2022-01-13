@@ -554,11 +554,22 @@ export default {
 export default {
   setup(props,context) {
     // Attribute (非响应式对象，等同于$attrs)
+    console.log(context.attrs)
+
+    // 插槽（非响应式对象，等同于$slots）
     console.log(context.slots)
 
-    // 
+    // 触发事件（方法，等同于$emit）
+    console.log(context.emit)
+
+    // 暴露公共property（函数）
+    console.log(context.expose)
   }
 }
+
+context是一个普通的JavaScript对象，也就是说，它不是响应式的，这意味着你可以安全地对
+context使用ES6解构。
+
 ```
 #### 组合式 API 基础
 
