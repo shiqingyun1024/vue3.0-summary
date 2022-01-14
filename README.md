@@ -852,6 +852,20 @@ renderTriggered  onRenderTriggered
 activated        onActivated
 deactivated      onDeactivated
 
+**注意：因为setup是围绕beforeCreate 和 created 生命周期钩子运行的，所以不需要显式地定义它们。换句话说，
+在这些钩子中编写的任何代码都应该直接在setup函数中编写。**
+
+这些函数接受一个回调函数，当钩子被组件调用时将会被执行：
+// MyBook.vue
+export default {
+  setup() {
+    // mounted
+    onMounted(()=>{
+      console.log('Component is mounted')
+    })
+  }
+}
+
 ```
 
 #### 组合式 API 基础
