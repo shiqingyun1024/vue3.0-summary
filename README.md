@@ -764,6 +764,47 @@ export default {
   }
 }
 **注意点：关于渲染函数h里面的写法，目前我还不熟悉，需要好好梳理一下。**
+****
+关于渲染函数h的理解：
+h函数就是vue中的createElement方法，这个函数作用就是创建虚拟dom，追踪dom变化的。
+function h(tag,props,...children){//h函数，返回一个虚拟dom对象
+    return {
+        tag,
+        props:props || {},
+        children:children.flat()//扁平化数组，降至一维数组
+    }
+}
+
+createElment参数（也就是h函数）：
+
+我们还是以官方文档的解释来讲，createElment函数接受三个参数，分别是：
+
+     参数一：tag（标签名）、组件的选项对象、函数（必选）；
+
+     参数二：一个对象，标签的属性对应的数据（可选）；
+
+     参数三：子级虚拟节点，字符串形式或数组形式，子级虚拟节点也需要使用createElement构建。
+
+// main.jsx
+function getVDOM(){
+  return (
+    <div id="app">
+       <p nameProperty="vue">my name is vue</p>
+    </div>
+  )
+}
+如果要用h函数来写上面的内容：
+function getVDOM(){
+  return h(
+    "div",
+    {id:"app"},
+    h("p",
+    {className:"text"},
+    "hello world!!!"
+    )
+  )
+}
+****
 
 ```
 #### 组合式 API 基础
