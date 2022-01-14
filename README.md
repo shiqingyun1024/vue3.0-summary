@@ -590,7 +590,7 @@ setup(props){
   const title = toRef(props,title) // **注意点：toRef和toRefs的使用的区别和场景。**
   console.log(title.value)
 }
-** 个人补充点：**
+** 个人补充点：toRef和toRefs的使用的区别和场景**
 ****
 ## toRef
 
@@ -647,6 +647,21 @@ function useFeatureX(){
   // 返回时转换为ref
   return toRefs(state)
 }
+
+export default {
+  setup(){
+    // 可以在不失去响应性的情况下解构
+    const { foo,bar } = useFeatureX()
+
+    return {
+      foo,
+      bar
+    }
+  }
+}
+
+toRefs只会为源对象中包含的property生成ref（**注意：如果源对象中没有，那就没法生成**）。
+如果要为特定的property创建ref，则应当使用toRef
 ****
 
 ## Context
