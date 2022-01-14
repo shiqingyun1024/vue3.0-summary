@@ -806,6 +806,29 @@ function getVDOM(){
 }
 ****
 
+返回一个渲染函数将阻止我们返回任何其它的东西。从内部来说这不应该成为一个问题，但当我们想要将
+这个组件的方法通过模板ref暴露给父组件时就不一样了。
+
+我们可以通过调用expose(它可以通过对context的解构赋值来得到)来解决这个问题，给它传递一个对象，其中定义的property将可以被外部组件
+实例访问：
+
+import { h, ref } from 'vue'
+export default {
+  setup(props, { expose }){
+    const count = ref(0)
+    const increment = () => ++count.value
+
+    expose({
+      increment
+    })
+    return () => h('div', count.value)
+  }
+}
+
+这个increment方法现在将可以通过父组件的模板ref访问。
+（**注意：意思就是在父组件中引入上面写的这个子组件时，在父组件中的模板中通过在子组件中设置ref属性，然后在父组件中就可以
+通过ref来代表子组件，并可以使用expose暴露出来的方法。
+**）
 ```
 #### 组合式 API 基础
 
