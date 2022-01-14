@@ -546,6 +546,109 @@ export default {
 
 #### Setup
 ```
+参数
+
+使用setup函数时，它将接收两个参数：
+1. props
+2. context
+让我们更深入地研究如何使用每个参数。
+
+## props
+setup函数中的第一个参数是props。正如在一个标准组件中所期望的那样，setup函数中的props是响应式的，
+当传入新的prop时，它将被更新。（**注意点：props是第一个参数，而且是响应式的。**）
+
+// MyBook.vue
+export default {
+  props: {
+    title: String
+  },
+  setup(props){
+    console.log(props.title)
+  }
+}
+**警告：但是，因为props是响应式的，你不能使用ES6解构，它会消除prop的响应性。**
+如果需要解构prop，可以在setup函数中使用toRefs函数来完成此操作：
+
+// MyBook.vue
+import { toRefs } from 'vue'
+export default {
+  props: {
+    title:String
+  },
+  setup(props){
+    const {title } = toRefs(props)
+    console.log(title.value)  // **注意点：使用toRefs包裹之后，解构赋值之后的值使用时要用.value**
+  }
+}
+
+如果title是可选的prop，则传入的props中可能没有title。在这种情况下，toRefs将不会为title创建一个ref。
+你需要使用toRef替代它：
+
+// MyBook.vue
+import { toRef } from 'vue'
+setup(props){
+  const title = toRef(props,title) // **注意点：toRef和toRefs的使用的区别和场景。**
+  console.log(title.value)
+}
+** 个人补充点：**
+****
+## toRef
+
+可以用来为源响应式对象上的某个property新建一个ref。然后，ref可以被传递，它会保持对其源property的响应式连接。
+const state = reactive({
+  foo:1,
+  bar:2
+})
+const fooRef = toRef(state,'foo')
+fooRef.value++
+console.log(state.foo) // 2
+
+state.foo++
+console.log(fooRef.value) // 3
+
+当你要将props的ref传递给复合函数时，toRef很有用：
+export default {
+  setup(props){
+    useSomeFeature(toRef(props,'foo'))
+  }
+}
+即使源property不存在，toRef也会返回一个可用的ref。这使得它在使用可选prop时特别有用，
+可选prop并不会被toRefs处理。
+
+## toRefs
+将响应式对象转换为普通对象，其中结果对象的每个property都是指向原始对象相应property的ref。
+const state = reactive({
+  foo:1,
+  bar:2
+})
+const stateAsRefs = toRefs(state)
+/*
+stateAsRefs的类型：
+{
+  foo:Ref<number>,
+  bar:Ref<number>
+}
+*/
+// ref和原始property已经“链接”起来了
+state.foo++
+console.log(stateAsRefs.foo.value) // 2
+
+stateAsRefs.foo.value++
+console.log(state.foo) // 3
+
+当从组合式函数返回响应式对象时，toRefs非常有用，这样消费组件就可以在不丢失响应性的情况下对返回的对象进行解构/展开：
+function useFeatureX(){
+  const state = reactive({
+    foo:1,
+    bar:2
+  })
+
+  // 操作state的逻辑
+  // 返回时转换为ref
+  return toRefs(state)
+}
+****
+
 ## Context
 传递给setup函数的第二个参数是context。context是一个普通JavaScript对象，暴露了其它
 可能在setup中有用的值：
