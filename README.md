@@ -834,6 +834,26 @@ export default {
 在setup() 内部，this不是该活跃实例的引用，因为setup()是在解析其它组件选项之前被调用的，所以setup()内部的this的行为
 与其它选项中的this完全不同。这使得setup()在和其它选项式 API 一起使用时可能会导致混淆。
 ```
+#### 生命周期钩子
+```
+你可以通过在生命周期钩子加上“on”来访问组件的生命周期钩子。
+选项式API         Hook inside （setup）
+beforeCreate     Not needed
+created          Not needed
+beforeMount      onBeforeMount
+mounted          onMounted
+beforeUpdate     onBeforeUpdate
+updated          onUpdated
+beforeUnmount    onBeforeUnmount
+unmounted        onUnmounted
+errorCaptured    onErrorCaptured
+renderTracked    onRenderTracked
+renderTriggered  onRenderTriggered
+activated        onActivated
+deactivated      onDeactivated
+
+```
+
 #### 组合式 API 基础
 
 ```
