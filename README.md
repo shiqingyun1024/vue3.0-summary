@@ -867,6 +867,10 @@ export default {
 }
 
 ```
+#### Provide/Inject
+```
+
+```
 
 #### 组合式 API 基础
 
