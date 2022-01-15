@@ -888,8 +888,20 @@ export default {
   },
   provide: {
     location: 'North pole',
+    geolocation: {
+      longitude: 90,
+      latitude: 135
+    }
   }
 }
+</script>
+
+<!-- src/components/MyMarker.vue -->
+<script>
+export default {
+  inject: ['location', 'geolocation']
+}
+</script>
 ```
 
 #### 组合式 API 基础
