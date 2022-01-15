@@ -902,6 +902,11 @@ export default {
   inject: ['location', 'geolocation']
 }
 </script>
+
+## 使用 Provide
+
+在setup() 中使用provide时，我们首先从vue显式导入 provide 方法，这使我们能够调用
+provide来定义每个Property。
 ```
 
 #### 组合式 API 基础
