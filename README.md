@@ -869,7 +869,7 @@ export default {
 ```
 #### Provide/Inject
 ```
-
+我们也可以在组合式API中使用Provide/Inject。两者都只能在当前活动实例的setup()期间调用。
 ```
 
 #### 组合式 API 基础
