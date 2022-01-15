@@ -911,7 +911,11 @@ provide来定义每个Property。
 provide函数允许你通过两个参数定义property：
 1. name（<string> 类型）
 2. value
-
+使用MyMap组件后，provide的值可以按如下方式重构：
+<!-- src/components/MyMap.vue -->
+<template>
+  <MyMarker />
+</template>
 ```
 
 #### 组合式 API 基础
