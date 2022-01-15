@@ -874,6 +874,22 @@ export default {
 ## 设想场景
 假设我们要重写以下代码，其中包括一个MyMap组件，该组件使用组合式API为MyMarker组件提供
 用户的位置。
+
+<!-- src/components/MyMap.vue -->
+<template>
+  <MyMarker/>
+</template>
+<script>
+import MyMarker from './MyMarker.vue'
+
+export default {
+  components: {
+    MyMarker
+  },
+  provide: {
+    location: 'North pole',
+  }
+}
 ```
 
 #### 组合式 API 基础
