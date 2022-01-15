@@ -907,6 +907,11 @@ export default {
 
 在setup() 中使用provide时，我们首先从vue显式导入 provide 方法，这使我们能够调用
 provide来定义每个Property。
+
+provide函数允许你通过两个参数定义property：
+1. name（<string> 类型）
+2. value
+
 ```
 
 #### 组合式 API 基础
