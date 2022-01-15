@@ -870,6 +870,10 @@ export default {
 #### Provide/Inject
 ```
 我们也可以在组合式API中使用Provide/Inject。两者都只能在当前活动实例的setup()期间调用。
+
+## 设想场景
+假设我们要重写以下代码，其中包括一个MyMap组件，该组件使用组合式API为MyMarker组件提供
+用户的位置。
 ```
 
 #### 组合式 API 基础
