@@ -925,7 +925,11 @@ export default {
     MyMarker
   },
   setup(){
-    provide('')
+    provide('location', 'North Pole')
+    provide('geolocation', {
+      longitude: 90,
+      latitude: 135
+    })
   }
 }
 </script>
