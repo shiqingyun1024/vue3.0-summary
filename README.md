@@ -916,7 +916,19 @@ provide函数允许你通过两个参数定义property：
 <template>
   <MyMarker />
 </template>
+<script>
+import { provide } from 'vue'
+import MyMarker from './MyMarker.vue'
 
+export default {
+  components:{
+    MyMarker
+  },
+  setup(){
+    provide('')
+  }
+}
+</script>
 ```
 
 #### 组合式 API 基础
