@@ -937,7 +937,22 @@ export default {
 ## 使用inject
 在setup() 中使用inject时，也需要从vue显式导入。导入以后，我们就可以调用它来定义暴露给我们的组件方式。
 inject函数有两个参数：
-1. 要
+1. 要inject的property的name
+2. 默认值（可选）
+
+使用MyMarker组件，可以使用以下代码对其进行重构：
+<!-- src/components/MyMarker.vue -->
+<script>
+import { inject } from 'vue'
+
+export default {
+  setup() {
+    const userLocation = inject('location','The Universe')
+    const userGeolocation = inject('geolocation')
+
+  }
+}
+</script>
 ```
 
 #### 组合式 API 基础
