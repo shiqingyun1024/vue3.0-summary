@@ -867,7 +867,86 @@ export default {
 }
 
 ```
-#### Provide/Inject
+#### 对于Provide/Inject的认识和了解
+```
+通常，当我们需要从父组件向子组件传递数据时，我们使用props。想象一下这样的结构：有一些深度嵌套的组件，而深层的子组件只需要父组件的部分内容。在这种情况下，如果仍然将prop沿着组件链逐级传递下去，可能会很麻烦。
+
+对于这种情况，我们可以使用一对provide和inject。无论组件层次结构有多深，父组件都可以作为其所有子组件的依赖提供者。这个特性有两个部分：父组件有一个provide选项来提供数据，子组件有一个inject选项来开始使用这些数据。
+例如，我们有这样的层次结构：
+Root
+  |
+TodoList
+  |
+TodoListFooter   TodoItem
+  |
+ClearTodosButton  TodoListStatistics
+
+如果要将todo-items的长度直接传递给TodoListStatistics，我们要将prop逐级传递下去：
+TodoList -> TodoListFooter -> TodoListStatistics。通过Provide/Inject的方式，我们可以直接执行以下操作：
+
+const app = Vue.createApp({})
+app.component('todo-list',{
+  data() {
+    return {
+      todos:['Feed a cat', 'Buy tickets']
+    }
+  },
+  provide:{
+    user:'John Doe'
+  },
+  template:`
+    <div>
+      {{todos.length}}
+      <!-- 模板的其余部分 -->
+    </div>
+  `
+})
+
+app.component('todo-list-statistics',{
+  inject:['user'],
+  created(){
+    console.log(`Injected property:${this.user}`) // > 注入的property：John Doe
+  }
+})
+
+但是，如果我们尝试在此处provide一些组件的实例property，这将不起作用的：**注意：这一点很重要**
+app.component('todo-list',{
+  data() {
+    return {
+      todos:['Feed a cat', 'Buy tickets']
+    }
+  },
+  provide:{
+    todoLength:this.todos.length  // 将会导致错误'cannot read property ’length‘ of undefined'
+  },
+  template:`
+    <div>
+      ....
+    </div>
+  `
+})
+
+要访问组件实例property，我们需要将provide转换为返回对象的函数：**注意：这是对上述报错的解决方案**
+app.component('todo-list',{
+  data() {
+    return {
+      todos: ['Feed a cat', 'Buy tickets']
+    }
+  },
+  provide() {
+    return {
+      todoLength: this.todos.length
+    }
+  },
+  template:`
+    <div>
+      ....
+    </div>
+  `
+})
+```
+
+#### Provide/Inject的深入
 ```
 我们也可以在组合式API中使用Provide/Inject。两者都只能在当前活动实例的setup()期间调用。
 
