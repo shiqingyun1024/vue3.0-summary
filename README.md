@@ -1142,6 +1142,56 @@ export default {
 
 然而，有时我们需要在注入数据的组件内部更新inject的数据。在这种情况下，我们建议provide一个方法
 来负责改变响应式property。
+
+<!-- src/components/MyMap.vue -->
+<template>
+  <MyMarker />
+</template>
+
+<script>
+import { provide, reactive, ref } from 'vue'
+import MyMarker from './MyMarker.vue'
+
+export default {
+  components: {
+    MyMarker
+  },
+  setup() {
+    const location = ref('North Pole')
+    const geolocation = reactive({
+      longitude: 90,
+      latitude: 135
+    })
+
+    const updateLocation = () => {
+      location.value = 'South Pole'
+    }
+
+    provide('location', location)
+    provide('geolocation', geolocation)
+    provide('updateLocation', updateLocation)
+  }
+}
+</script>
+
+<!-- src/components/MyMarker.vue -->
+<script>
+import { inject } from 'vue'
+
+export default {
+  setup() {
+    const userLocation = inject('location', 'The Universe')
+    const userGeolocation = inject('geolocation')
+    const updateUserLocation = inject('updateLocation')
+
+    return {
+      userLocation,
+      userGeolocation,
+      updateUserLocation
+    }
+  }
+}
+</script>
 ```
 
 #### 组合式 API 基础
