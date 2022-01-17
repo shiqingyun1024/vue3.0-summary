@@ -1140,6 +1140,8 @@ export default {
 }
 </script>
 
+然而，有时我们需要在注入数据的组件内部更新inject的数据。在这种情况下，我们建议provide一个方法
+来负责改变响应式property。
 ```
 
 #### 组合式 API 基础
