@@ -1074,6 +1074,20 @@ export default {
 为了增加provide值和inject值之间的响应性，我们可以在provide值时使用ref或reactive。
 使用MyMap组件，我们的代码可以更新如下：
 
+<!-- src/components/MyMap.vue -->
+<template>
+  <MyMarker />
+</template>
+
+<script>
+import { provide, reactive, ref } from 'vue'
+import MyMarker from './MyMarker.vue'
+
+export default {
+  
+}
+</script>
+
 ```
 
 #### 组合式 API 基础
