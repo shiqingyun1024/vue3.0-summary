@@ -933,6 +933,7 @@ app.component('todo-list',{
       todos: ['Feed a cat', 'Buy tickets']
     }
   },
+  // **注意：这样就会起作用了**
   provide() {
     return {
       todoLength: this.todos.length
@@ -944,6 +945,36 @@ app.component('todo-list',{
     </div>
   `
 })
+
+这使我们能够更安全地继续开发该组件，而不必担心可能会更改/删除子组件所依赖的某些内容。这些组件
+之间的接口仍然是明确定义的，就像props一样。
+实际上，你可以将依赖注入看作是’长距离的prop‘，除了：
+- 父组件不需要知道哪些子组件使用了它provide的property
+- 子组件不需要知道inject的property来自哪里
+
+## 处理响应式
+在上面的例子中，如果我们更改了todos的列表，这个变化并不会反映在inject的todoLength
+property中。这是因为默认情况下，provide/inject绑定并不是响应式的。我们可以通过传递一个
+ref property或者reactive对象给provide来改变这种行为。在我们的例子中，如果我们相对祖先
+组件中的更改做出响应，我们需要为provide的todoLength分配一个组合式API computed property：
+
+app.component('todo-list', {
+  // ...
+  provide() {
+    return {
+      todoLength: Vue.computed(() => this.todos.length)
+    }
+  }
+})
+
+app.component('todo-list-statistics', {
+  inject: ['todoLength'],
+  created() {
+    console.log(`Injected property: ${this.todoLength.value}`) // > 注入的 property: 5
+  }
+})
+
+在这种情况下，任何对 todos.length 的改变都会被正确地反映在注入 todoLength 的组件中。在响应式计算和侦听章节中阅读更多关于 computed 的信息，以及在组合式 API 章节中阅读更多关于 reactive provide/inject 的信息。
 ```
 
 #### Provide/Inject的深入
