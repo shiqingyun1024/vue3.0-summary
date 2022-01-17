@@ -1100,6 +1100,27 @@ export default {
 }
 </script>
 
+现在，如果这两个property中有任何更改，MyMarker组件也将自动更新！
+
+## 修改响应式property
+当使用响应式provide/inject值时，建议尽可能将对响应式property的所有修改限制在定义provide的组件内部。
+例如，也需要更改用户位置的位置下，我们最好在MyMap组件中执行此操作。
+<!-- src/components/MyMap.vue -->
+<template>
+  <MyMarker />
+</template>
+
+<script>
+import { provide, reactive, ref } from 'vue'
+import MyMarker from './MyMarker.vue'
+
+export default {
+  components: {
+    MyMarker
+  },
+}
+</script>
+
 ```
 
 #### 组合式 API 基础
