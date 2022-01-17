@@ -1060,9 +1060,20 @@ export default {
     const userLocation = inject('location','The Universe')
     const userGeolocation = inject('geolocation')
 
+    return {
+      userLocation,
+      userGeolocation
+    }
   }
 }
 </script>
+
+## 响应式
+
+添加响应性
+为了增加provide值和inject值之间的响应性，我们可以在provide值时使用ref或reactive。
+使用MyMap组件，我们的代码可以更新如下：
+
 ```
 
 #### 组合式 API 基础
