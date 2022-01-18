@@ -1,22 +1,20 @@
 <template>
-  <div>{{ collectionName }}: {{ readersNumber }} {{ book.title }}</div>
+   <div ref="root">This is a root element</div>
 </template>
-
-<script lang="ts">
-  import { ref, reactive } from 'vue'
+<script>
+  import { ref, onMounted }  from 'vue'
 
   export default {
-    props: {
-      collectionName: String
-    },
-    setup(props:any) {
-      const readersNumber = ref(0)
-      const book = reactive({ title: 'Vue 3 Guide' })
+    setup() {
+      const root = ref(null)
 
-      // 暴露给 template
+      onMounted(() =>{
+        // DOM 元素将在初始渲染后分配给 ref
+        console.log(root.value) // <div>This is a root element</div>
+      })
+
       return {
-        readersNumber,
-        book
+        root
       }
     }
   }
