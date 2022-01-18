@@ -1257,7 +1257,20 @@ export default {
 
 作为模板使用的ref的行为与任何其他ref一样：它们是响应式的，可以传递到 (或从中返回) 复合函数中。
 
-#
+## JSX中的用法
+
+export default {
+  setup() {
+    const root  = ref(null)
+
+    return ()=> h('div',{
+      ref:root
+    })
+
+    // with JSX
+    return ()=> <div ref={root} />
+  }
+}
 
 ```
 #### 组合式 API 基础
