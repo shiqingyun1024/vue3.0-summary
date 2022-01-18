@@ -1222,6 +1222,37 @@ export default {
 </script>
 ```
 
+#### 模板引用
+
+```
+在使用组合式API时，响应式引用和模板引用的概念是统一的。为了获得对模板内元素或组件实例的引用，
+我们可以像往常一样声明ref并从setup()返回：
+
+<template>
+   <div ref="root">This is a root element</div>
+</template>
+<script>
+  import { ref, onMounted }  from 'vue'
+
+  export default {
+    setup() {
+      const root = ref(null)
+
+      onMounted(() =>{
+        // DOM 元素将在初始渲染后分配给 ref
+        console.log(root.value) // <div>This is a root element</div>
+      })
+
+      return {
+        root
+      }
+    }
+  }
+</script>
+
+
+
+```
 #### 组合式 API 基础
 
 ```
