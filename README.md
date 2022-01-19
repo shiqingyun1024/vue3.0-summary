@@ -1409,7 +1409,52 @@ vm.$mount('#app');
 
 补充知识：Vue手动挂载组件$mount()，实现js插入组件，替换组件。
 
+
 ## 选项合并
+
+当组件和mixin对象含有同名选项时，这些选项将以恰当的方式进行“合并”。
+比如，每个mixin可以拥有自己的data函数。每个data函数都会被调用，并将返回结果合并。在数据
+的property发生冲突时，会以组件自身的数据为优先。**注意：会以组件自身的数据为优先。**
+
+const myMixin = {
+  data() {
+    return {
+      message: 'hello',
+      foo: 'abc'
+    }
+  }
+}
+
+const app = Vue.createApp({
+  mixins: [myMixin],
+  data() {
+    return {
+      message: 'goodbye',
+      bar: 'def'
+    }
+  },
+  created() {
+    console.log(this.$data) // => { messgae: "goodbye", foo: "abc",bar:"def" }
+  }
+})
+
+同名钩子函数将合并为一个数组，因此都将被调用。另外，mixin对象的钩子将在组件自身钩子之前调用。**注意：mixin对象的钩子将在组件自身钩子之前调用。**
+
+const myMixin = {
+  created() {
+    console.log('mixin 对象的钩子被调用')
+  }
+}
+
+const app = Vue.createApp({
+  mixins: [myMixin],
+  created(){
+    console.log('组件钩子被调用')
+  }
+})
+
+// => mixin 对象的钩子被调用
+// => 组件钩子被调用
 
 ```
 
