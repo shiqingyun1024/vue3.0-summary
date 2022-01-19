@@ -1514,6 +1514,10 @@ app.mount('#mixins-global')
 // => "hello from component!"
 
 大多数情况下，只应当应用于自定义选项，就像上面示例一样。推荐将其作为插件发布，以避免重复应用mixin。
+
+## 自定义选项合并策略
+自定义选项在合并时，默认策略为简单地覆盖已有值。如果想让某个自定义选项以自定义逻辑进行合并，
+可以在app.config.optionMergeStrategies中添加一个函数。
 ```
 
 
