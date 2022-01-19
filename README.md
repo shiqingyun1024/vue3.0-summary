@@ -1361,6 +1361,59 @@ export default {
   }
 </script>
 ```
+#### Mixin
+```
+## 基础
+
+Mixin提供了一种灵活的方式，来分发Vue组件中的可复用功能。一个mixin对象可以包含任意组件
+选项。当组件使用mixin对象时，所有mixin对象的选项将被“混合”进入该组件本身的选项。
+
+例子：
+// 定义一个mixin对象
+const myMixin = {
+  created() {
+    this.hello()
+  },
+  methods:{
+    hello(){
+      console.log('hello from mixin!')
+    }
+  }
+}
+
+// 定义一个使用此mixin对象的应用
+const app = Vue.createApp({
+  mixins:[myMixin]
+})
+
+app.mount('#mixins-basic') // => "hello from mixin!"
+
+**注意：关于app.mount()的理解如下：**
+在Vue构造函数时，需要配置一个el属性，如果没有没有el属性时，可以使用.$mount('#app')进行挂载。
+配置了el属性：
+new Vue({
+  el:"#app",
+  router
+});
+如果没有配置el属性，可以使用手动挂载$mount("#app")
+new Vue({
+  router
+}).$mount('#app');
+
+或者
+
+var vm = new Vue({
+   router
+});
+vm.$mount('#app');
+
+补充知识：Vue手动挂载组件$mount()，实现js插入组件，替换组件。
+
+## 选项合并
+
+```
+
+
 #### 组合式 API 基础
 
 ```
