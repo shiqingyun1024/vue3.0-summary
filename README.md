@@ -1524,6 +1524,26 @@ const app = Vue.createApp({})
 app.config.optionMergeStrategies.customOption = (toVal, fromVal) => {
   // return mergedVal
 }
+
+合并策略接收在父实例和子实例上定义的该选项的值，分别作为第一个和第二个参数。让我们来检查一下使用 mixin 时，这些参数有哪些：
+
+const app = Vue.createApp({
+  custom: 'hello!'
+})
+
+app.config.optionMergeStrategies.custom = (toVal, fromVal) => {
+  console.log(fromVal, toVal)
+  // => "goodbye!", undefined
+  // => "hello", "goodbye!"
+  return fromVal || toVal
+}
+
+app.mixin({
+  custom: 'goodbye!',
+  created() {
+    console.log(this.$options.custom) // => "hello!"
+  }
+})
 ```
 
 
