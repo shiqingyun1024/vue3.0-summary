@@ -1487,6 +1487,33 @@ vm.foo() // => "foo"
 vm.bar() // => "bar"
 vm.conflicting() // => "from self"
 
+## 全局 mixin
+
+你还可以为Vue应用程序全部应用mixin：
+
+const app = Vue.createApp({
+  myOption: 'hello!'
+})
+// 为自定义的选项‘myOption’注入一个处理器。
+app.mixin({
+  created(){
+    const myOption = this.$options.myOption
+    if(myOption) {
+      console.log(myOption)
+    }
+  }
+})
+// 将myOption也添加到子组件中
+app.component('test-component',{
+  myOption:'hello from component'
+})
+
+app.mount('#mixins-global')
+
+// => "hello!"
+// => "hello from component!"
+
+大多数情况下，只应当应用于自定义选项，就像上面示例一样。推荐将其作为插件发布，以避免重复应用mixin。
 ```
 
 
