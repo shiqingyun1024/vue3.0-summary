@@ -1456,6 +1456,37 @@ const app = Vue.createApp({
 // => mixin 对象的钩子被调用
 // => 组件钩子被调用
 
+值为对象的选项，例如 methods、components和directives（指令），将被合并为同一个对象。两个对象
+键名冲突时，取组件对象的键值对。
+
+const myMixin = {
+  methods:{
+    foo() {
+      console.log('foo')
+    },
+    conflicting() {
+      console.log('from mixin')
+    }
+  }
+}
+
+const app = Vue.createApp({
+  mixins: [myMixin],
+  methods: {
+    bar() {
+      console.log('bar')
+    },
+    conflicting() {
+      console.log('from self')
+    }
+  }
+})
+
+const vm = app.mount('#mixins-basic')
+vm.foo() // => "foo"
+vm.bar() // => "bar"
+vm.conflicting() // => "from self"
+
 ```
 
 
