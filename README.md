@@ -1544,6 +1544,33 @@ app.mixin({
     console.log(this.$options.custom) // => "hello!"
   }
 })
+
+如你所见，在控制台中，我们先从 mixin 打印 toVal 和 fromVal，然后从 app 打印。如果存在，我们总是返回 fromVal，
+这就是为什么 this.$options.custom 设置为 hello! 最后。让我们尝试将策略更改为始终从子实例返回值：
+
+const app = Vue.createApp({
+  custom: 'hello!'
+})
+
+app.config.optionMergeStrategies.custom = (toVal, fromVal) => toVal || fromVal
+
+app.mixin({
+  custom: 'goodbye!',
+  created() {
+    console.log(this.$options.custom) // => "goodbye!"
+  }
+})
+
+## 不足
+在 Vue 2 中，mixin 是将部分组件逻辑抽象成可重用块的主要工具。但是，他们有几个问题：
+
+Mixin 很容易发生冲突：因为每个 mixin 的 property 都被合并到同一个组件中，所以为了避免 property 名冲突，你仍然需要了解其他每个特性。
+
+可重用性是有限的：我们不能向 mixin 传递任何参数来改变它的逻辑，这降低了它们在抽象逻辑方面的灵活性。
+
+为了解决这些问题，我们添加了一种通过逻辑关注点组织代码的新方法：组合式 API。
+
+**注意：mixin自定义选项合并策略在实际项目中我还没用到过，应用场景需要多注意。**
 ```
 
 
