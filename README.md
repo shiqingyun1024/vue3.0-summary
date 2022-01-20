@@ -1715,6 +1715,14 @@ app.directive('pin', (el, binding) => {
   const s = binding.arg || 'top'
   el.style[s] = binding.value + 'px'
 })
+
+## 对象字面量
+如果指令需要多个值，可以传入一个 JavaScript 对象字面量。记住，指令函数能够接受所有合法的 JavaScript 表达式。
+<div v-demo="{ color: 'white', text: 'hello!' }"></div>
+app.directive('demo', (el, binding) => {
+  console.log(binding.value.color) // => "white"
+  console.log(binding.value.text) // => "hello!"
+})
 ```
 
 
