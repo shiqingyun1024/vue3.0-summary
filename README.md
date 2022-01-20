@@ -1626,6 +1626,56 @@ directives: {
 
 - unmounted：当指令与元素解除绑定且父组件已卸载时，只调用一次。
 
+接下来我们来看一下在自定义指令API钩子函数的参数（即 el、binding、vnode 和 prevVnode）
+
+## 动态指令参数
+指令的参数可以是动态的。例如，在v-mydirective:[argument]="value"中，argument参数可以根据组件实例
+数据进行更新！这使得自定义指令可以在应用中被灵活使用。
+
+例如你想要创建一个自定义指令，用来通过固定布局将元素固定在页面上。我们可以创建一个自定义指令，
+它的值以像素为单位更新被固定元素的垂直位置，如下所示：
+<div id="dynamic-arguments-example" class="demo">
+  <p>Scroll down the page</p>
+  <p v-pin="200">Stick me 200px from the top of the page</p>
+</div>
+
+const app = Vue.createApp({})
+app.directive('pin',{
+  mounted(el,binding){
+    el.style.position = 'fixed'
+    // binding.value 是我们传递给指令的值 -- 在这里就是200
+    el.style.top = binding.value + 'px'
+  }
+})
+
+app.mount('#dynamic-arguments-example')
+
+这会把该元素固定在距离页面顶部200像素的位置。但如果场景是我们需要把元素固定在左侧而不是顶部
+又该怎么办呢？这时使用动态参数就可以非常方便地根据每个组件实例来进行更新。
+<div id="dynamicexample">
+  <h3>Scroll down inside this section ↓</h3>
+  <p v-pin:[direction]="200">I am pinned onto the page at 200px to the left.</p>
+</div>
+
+const app = Vue.createApp({
+  data() {
+    return {
+      direction:'right'
+    }
+  }
+})
+
+app.directive('pin',{
+  mounted(el,binding){
+    el.style.position = 'fixed'
+    // binding.arg 是我们传递给指令的参数
+    const s = binding.arg || 'top'
+    el.style[s] = binding.value + 'px'
+  }
+})
+
+app.mount('#dynamic-arguments-example')
+
 ```
 
 
