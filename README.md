@@ -1684,6 +1684,15 @@ app.mount('#dynamic-arguments-example')
   <input type="range" min="0" max="500" v-model="pinPadding">
   <p v-pin:[direction]="pinPadding">Stick me {{ pinPadding + 'px' }} from the {{ direction || 'top' }} of the page</p>
 </div>
+
+const app = Vue.createApp({
+  data(){
+    return {
+      direction: 'right',
+      pinPadding: 200
+    }
+  }
+})
 ```
 
 
