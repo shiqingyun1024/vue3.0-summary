@@ -1695,7 +1695,26 @@ const app = Vue.createApp({
 })
 
 让我们扩展指令逻辑以在组件更新后重新计算固定的距离。
+app.directive('pin',{
+  mounted(el,binding){
+    el.style.position = 'fixed'
+    const s = binding.arg || 'top'
+    el.style[s] = binding.value + 'px'
+  },
+  updated(el,binding){
+    const s = binding.arg || 'top'
+    el.style[s] = binding.value + 'px'
+  }
+})
 
+## 函数简写
+在前面的例子中，你可能想在 mounted 和 updated 时触发相同行为，而不关心其他的钩子函数。
+那么你可以通过将这个回调函数传递给指令来实现：
+app.directive('pin', (el, binding) => {
+  el.style.position = 'fixed'
+  const s = binding.arg || 'top'
+  el.style[s] = binding.value + 'px'
+})
 ```
 
 
