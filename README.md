@@ -1678,6 +1678,12 @@ app.mount('#dynamic-arguments-example')
 
 我们的自定义指令现在已经足够灵活，可以支持一些不同的用例。为了使其更具动态性，我们还可以允许
 修改绑定值。让我们创建一个附件属性pinPadding，并将其绑定到<input type="range">
+
+<div id="dynamicexample">
+  <h2>Scroll down the page</h2>
+  <input type="range" min="0" max="500" v-model="pinPadding">
+  <p v-pin:[direction]="pinPadding">Stick me {{ pinPadding + 'px' }} from the {{ direction || 'top' }} of the page</p>
+</div>
 ```
 
 
