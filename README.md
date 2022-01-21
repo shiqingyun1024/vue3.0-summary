@@ -1871,6 +1871,23 @@ app.component('child-component', {
 </div>
 你可以在 API 参考 查看 teleport 组件。
 ```
+#### 渲染函数
+```
+Vue推荐在绝大多数情况下使用模板来创建你的HTML。然而在一些场景中，你真的需要JavaScript的完全
+编程能力。这时你可以用渲染函数，它比模板更接近编译器。
+
+让我们深入一个简单的例子，这个例子里render函数很实用。假设我们要生成一些带锚点的标题：
+<h1>
+   <a name="hello-world" href="#hello-world">
+      Hello world!
+   </a>
+</h1>
+锚点标题的使用非常频繁，我们应该创建一个组件：
+<anchored-heading :level="1">Hello world!</anchored-heading>
+当开始写一个只能通过level prop动态生成标题（heading）的组件时，我们很快就可以得出这样的结论：
+
+
+```
 
 
 #### 组合式 API 基础
