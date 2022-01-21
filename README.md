@@ -1740,6 +1740,57 @@ app.component('my-component', {
 **注意：有了片段支持以后，组件可能会有多个根节点。当被应用在一个多根节点的组件上时，指令会被忽略，并且会抛出一个警告。**
 ```
 
+#### Teleport（传送门）
+
+```
+Vue鼓励我们通过将UI和相关行为封装到组件中来构建UI。我们可以将它们嵌套在另外一个内部，以构建
+一个组成应用程序UI的树。
+
+然而，有时组件模板的一部分逻辑上属于该组件，而从技术角度来看，最好将模板的这一部分移动到
+DOM中Vue app之外的其他位置。
+
+一个常见的场景是创建一个包含全屏模式的组件。在大多数情况下，你希望模态框的逻辑存在于组件中，
+但是模态框的快速定位就很难通过CSS来解决，或者需要更改组件组合。
+
+考虑下面的HTML结构。
+<body>
+  <div style="position:relative;">
+    <h3>Tooltips with Vue 3 Teleport</h3>
+    <div>
+       <model-button></model-button>
+    </div>
+  </div>
+</body>
+
+让我们来看看 modal-button组件：
+该组件将有一个button元素来触发模态框的打开，以及有一个带有class .modal的div元素，它将包含
+模态框的内容和一个用于自关闭的按钮。
+
+const app = Vue.createApp({});
+
+app.component('modal',{
+  template:`
+    <button @click="modalOpen=true">
+       Open full screen modal!
+    </button>
+
+    <div v-if="modalOpen" class="modal">
+      <div>
+        I'm a modal!
+        <button @click="modalOpen=false">
+        close
+        </button>
+      </div>
+    </div>
+  `,
+  data() {
+    return {
+      modalOpen: false
+    }
+  }
+})
+```
+
 
 #### 组合式 API 基础
 
