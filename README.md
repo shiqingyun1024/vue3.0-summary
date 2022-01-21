@@ -1886,6 +1886,102 @@ Vue推荐在绝大多数情况下使用模板来创建你的HTML。然而在一�
 <anchored-heading :level="1">Hello world!</anchored-heading>
 当开始写一个只能通过level prop动态生成标题（heading）的组件时，我们很快就可以得出这样的结论：
 
+const app = createApp({})
+
+app.component('anchored-heading',{
+  template: `
+    <h1 v-if="level === 1">
+      <slot></slot>
+    </h1>
+    <h2 v-else-if="level === 2">
+      <slot></slot>
+    </h2>
+    <h3 v-else-if="level === 3">
+      <slot></slot>
+    </h3>
+    <h4 v-else-if="level === 4">
+      <slot></slot>
+    </h4>
+    <h5 v-else-if="level === 5">
+      <slot></slot>
+    </h5>
+    <h6 v-else-if="level === 6">
+      <slot></slot>
+    </h6>
+  `,
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+})
+
+虽然模板在大多数组件中都非常好用，但是显然在这里它就不合适了。那么，我们来尝试使用 render 
+函数重写上面的例子：
+
+const { createApp } = vue
+
+const app = createApp({})
+
+app.component('anchored-heading',{
+  template: `
+    <h1 v-if="level === 1">
+      <slot></slot>
+    </h1>
+    <h2 v-else-if="level === 2">
+      <slot></slot>
+    </h2>
+    <h3 v-else-if="level === 3">
+      <slot></slot>
+    </h3>
+    <h4 v-else-if="level === 4">
+      <slot></slot>
+    </h4>
+    <h5 v-else-if="level === 5">
+      <slot></slot>
+    </h5>
+    <h6 v-else-if="level === 6">
+      <slot></slot>
+    </h6>
+  `,
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+})
+
+虽然模板在大多数组件中都非常好用，但是显然在这里它就不合适了。那么，我们来尝试使用 render 
+函数重写上面的例子：
+
+const { createApp, h } = vue
+
+const app = createApp({})
+
+app.component('anchored-heading',{
+  render(){
+    return h(
+      'h'+this.level, // 标签名
+      {}, // prop 或 attribute
+      this.$slots.default() // 包含其子节点的数组
+    )
+  },
+  props: {
+    level: {
+      type:Number,
+      required: true
+    }
+  }
+})
+
+render() 函数的实现要精简得多，但是需要非常熟悉组件的实例property。在这个例子中，你需要知道，
+向组件中传递不带v-slot指令的子节点时，比如anchored-heading中的Hello world!，这
+些子节点被存储在组件实例中的 $slots.default 中。如果你还不了解，在深入渲染函数之前推荐阅读
+实例 property API。
+
+## DOM树
 
 ```
 
