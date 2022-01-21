@@ -1821,6 +1821,38 @@ app.component('modal-button',{
     }
   }
 })
+
+因此，一旦我们单击按钮打开模态框，Vue将正确地将模态框内容渲染为body标签的子级。
+
+## 与Vue components一起使用
+如果<teleport>包含Vue组件，则它仍将是<teleport>父组件的逻辑子组件：
+const app = Vue.createApp({
+  template:`
+    <h1>Root instance</h1>
+    <parent-component/>
+  `
+})
+
+app.component('parent-component',{
+  template: `
+    <h2>This is a parent component</h2>
+    <teleport to="#endofbody">
+      <child-component name="John" />
+    </teleport>
+  `
+})
+app.component('child-component', {
+  props: ['name'],
+  template: `
+    <div>Hello, {{ name }}</div>
+  `
+})
+在这种情况下，即使在不同的地方渲染 child-component，它仍将是 parent-component 的子级，
+并将从中接收 name prop。
+
+这也意味着来自父组件的注入会正常工作，在 Vue Devtools 中你会看到子组件嵌套在父组件之下，而不是出现在他会被实际移动到的位置。
+
+## 在同一目标上使用多个 teleport
 ```
 
 
