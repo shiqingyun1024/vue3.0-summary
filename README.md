@@ -1789,6 +1789,38 @@ app.component('modal',{
     }
   }
 })
+
+当在初始的HTML结构中使用这个组件时，我们可以看到一个问题---模态框是在深度嵌套的div中
+渲染的，而模态框的position:absolute 以父级相对定位的div作为引用。
+
+Teleport提供了一种干净的方法，允许我们控制在DOM中哪个父节点下渲染了HTML，而不必求助于
+全局状态或将其拆分为两个组件。
+
+让我们修改 modal-button 已使用<teleport>，并告诉Vue”将这个HTML传送到’body‘标签下“。
+app.component('modal-button',{
+  template:`
+    <button @click="modalOpen=true">
+       Open full screen modal!(With teleport!)
+    </button>
+
+    <teleport to="body">
+      <div v-if="modalOpen" class="modal">
+        <div>
+          I'm a teleported modal! 
+          (My parent is "body")
+          <button @click="modalOpen = false">
+            Close
+          </button>
+        </div>
+      </div>
+    </teleport>
+  `,
+  data(){
+    return {
+      modalOpen: false
+    }
+  }
+})
 ```
 
 
