@@ -1993,6 +1993,12 @@ render() 函数的实现要精简得多，但是需要非常熟悉组件的实�
 如同你会画一张家谱树来追踪家庭成员的发展一样。
 
 上述 HTML 对应的 DOM 节点树如下图所示
+                    div
+h1            some text content       <!-- TODO: Add tagline -->
+                 (#text)                        (#comment)
+My title
+(#text) 
+
 
 ```
 
