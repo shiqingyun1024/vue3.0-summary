@@ -2014,6 +2014,9 @@ render() {
 ## 虚拟DOM树
 Vue通过建立一个虚拟DOM来追踪自己要如何改变真实DOM。请仔细看这行代码：
 
+return h('h1',{},this.blogTitle)
+h()到底会返回什么呢？其实不是一个实际的DOM元素。它更准确的名字可能是
+createNodeDescription
 ```
 
 
