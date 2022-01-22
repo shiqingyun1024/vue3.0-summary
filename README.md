@@ -2061,7 +2061,22 @@ h(
 ## 完整实例
 
 有了这些知识，我们现在可以完成我们最开始想实现的组件：
+const { createApp, h } = Vue
 
+const app = createApp({})
+
+/** 递归地从子节点获取文本 */
+function getChildrenTextContent(children) {
+  return children
+    .map(node => {
+      return typeof node.children === 'string'
+        ? node.children
+        : Array.isArray(node.children)
+        ? getChildrenTextContent(node.children)
+        : ''
+    })
+    .join('')
+}
 ```
 
 
