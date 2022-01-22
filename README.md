@@ -2022,7 +2022,38 @@ createNodeDescription，因为它所包含的信息会告诉Vue页面上需要�
 
 ## h() 参数
 
-h()函数是一个用于创建于VNode的使用程序。也许可以更准确地
+h()函数是一个用于创建于VNode的使用程序。也许可以更准确地将其命名为createVNode()，但由于
+频繁使用和简洁，它被称为h().它接受三个参数：
+// @returns {VNode}
+h(
+  // {String | Object | Function} tag
+  // 一个HTML标签名、一个组件、一个异步组件、或
+  // 一个函数式组件。
+  // 
+  // 必需的。
+  ‘div’,
+
+  // { Object } props
+  // 与attribute、prop和事件相对应的对象。
+  // 这会在模板中用到
+  //
+  //可选的。
+  {},
+
+  // {String | Array | Object} children
+  // 子 VNodes，使用`h()`构建，
+  // 或使用字符串获取“文本VNode”或者
+  // 有插槽的对象。
+  //
+  // 可选的。
+  [
+    'Some text comes first.',
+    h('h1', 'A headline'),
+    h(MyComponent, {
+      someProp: 'foobar'
+    })
+  ]
+)
 ```
 
 
