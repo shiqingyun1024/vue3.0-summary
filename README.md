@@ -2010,6 +2010,10 @@ render() {
   return h('h1',{},this.blogTitle)
 }
 在这两种情况下， Vue都会自动保持页面的更新，即便blogTitle发生了改变。
+
+## 虚拟DOM树
+Vue通过建立一个虚拟DOM来追踪自己要如何改变真实DOM。请仔细看这行代码：
+
 ```
 
 
