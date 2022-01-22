@@ -2016,7 +2016,9 @@ Vue通过建立一个虚拟DOM来追踪自己要如何改变真实DOM。请仔�
 
 return h('h1',{},this.blogTitle)
 h()到底会返回什么呢？其实不是一个实际的DOM元素。它更准确的名字可能是
-createNodeDescription
+createNodeDescription，因为它所包含的信息会告诉Vue页面上需要渲染什么样的节点，包括及其子
+节点的描述信息。我们把这样的节点描述为’虚拟节点（virtual node）‘,也常简写它为VNode。
+“虚拟DOM”是我们对由Vue组件树建立起来的整个VNode树的称呼。
 ```
 
 
