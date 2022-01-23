@@ -2127,7 +2127,12 @@ render() {
 
 ## 创建组件VNode
 要为某个组件创建一个VNode，传递给 h 的第一个参数应该是组件本身。
+render() {
+  return h(ButtonCounter)
+}
 
+如果我们需要通过名称来解析一个组件，那么我们可以调用resolveComponent：
+const { h, resolveComponent } = Vue
 
 ```
 
