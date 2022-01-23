@@ -2107,6 +2107,16 @@ app.component('anchored-heading', {
 VNode是必须唯一
 组件树中的所有VNode必须是唯一的。这意味着，下面的渲染函数是不合法的：
 
+render() {
+  const myParagraphVNode = h('p','hi')
+  return h('div',[
+    // 错误 - 重复的Vnode！
+    myParagraphVNode, myParagraphVNode
+  ])
+}
+
+如果你真的需要重复很多次的元素/组件，你可以使用工厂函数来实现。例如，下面这渲染函数
+
 ```
 
 
