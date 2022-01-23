@@ -2134,6 +2134,12 @@ render() {
 如果我们需要通过名称来解析一个组件，那么我们可以调用resolveComponent：
 const { h, resolveComponent } = Vue
 
+// ... 
+render() {
+  const ButtonCounter = resolveComponent('ButtonCounter')
+  return h(ButtonCounter)
+}
+
 ```
 
 
