@@ -2069,9 +2069,7 @@ const app = createApp({})
 function getChildrenTextContent(children) {
   return children
     .map(node => {
-      return typeof node.children === 'string'
-        ? node.children
-        : Array.isArray(node.children)
+      return typeof node.children === 'string' ? node.children : Array.isArray(node.children)
         ? getChildrenTextContent(node.children)
         : ''
     })
