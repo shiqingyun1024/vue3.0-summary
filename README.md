@@ -2102,6 +2102,11 @@ app.component('anchored-heading', {
     }
   }
 })
+
+## 约束
+VNode是必须唯一
+组件树中的所有VNode必须是唯一的。这意味着，下面的渲染函数是不合法的：
+
 ```
 
 
