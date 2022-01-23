@@ -2155,6 +2155,15 @@ render() {
 render() {
   return h(ButtonCounter)
 }
+
+## 使用JavaScript代替模板功能
+v-if和v-for
+只要在原生的JavaScript中可以轻松完成的操作，Vue的渲染函数就不会提供专有的替代方法。比如，
+在模板中使用的v-if和v-for：
+<ul v-if="items.length">
+  <li v-for="item in items">{{ item.name }}</li>
+</ul>
+<p v-else>No items found.</p>
 ```
 
 
