@@ -2140,6 +2140,21 @@ render() {
   return h(ButtonCounter)
 }
 
+resolveComponent 是模板内部用来解析组件名称的同一个函数。
+
+render函数通常只需要对全局注册的组件使用resolveComponent。而对于局部注册的却可以跳过，
+请看下面的例子：
+// 此写法可以简化
+components: {
+  ButtonCounter
+},
+render() {
+  return h(resolveComponent('ButtonCounter'))
+}
+我们可以直接使用它，而不是通过名称注册一个组件，然后再查找：
+render() {
+  return h(ButtonCounter)
+}
 ```
 
 
