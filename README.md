@@ -2212,6 +2212,38 @@ render() {
 
 对于所有其它的修饰符，私有前缀都不是必须的，因为你可以在事件处理函数中使用事件方法：
 
+修饰符	        处理函数中的等价操作
+.stop	         event.stopPropagation()
+.prevent	     event.preventDefault()
+.self	         if (event.target !== event.currentTarget) return
+按键：
+.enter, .13	   if (event.keyCode !== 13) return (对于别的按键修饰符来说，可将 13 改为另一个按键码
+修饰键：
+.ctrl, .alt, .shift, .meta	   if (!event.ctrlKey) return (将 ctrlKey 分别修改为 altKey, shiftKey, 或 metaKey)
+
+这里是一个使用所有修饰符的例子：
+
+render() {
+  return h('input',{
+    onKeyUp: event => {
+      // 如果触发事件的元素不是事件绑定的元素
+      // 则返回
+      if(event.target !== event.currentTarget) return
+      // 如果向上不是回车键，则终止。
+      // 没有同时按下按键（13）和 shift键
+      if(!event.shiftKey || event.keyCode !== 13) return
+      // 停止事件传播
+      event.stopPropagation()
+      // 阻止该元素默认的keyup事件
+      event.preventDefault()
+      // ...
+    }
+  })
+}
+
+## 插槽
+
+你可以通过this.$slots访问静态插槽的内容，每个插槽都是一个VNode数组：
 ```
 
 
