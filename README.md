@@ -2590,6 +2590,67 @@ app.mount('#app')
 
 awesome-vue 集合了大量由社区贡献的插件和库。
 ```
+## 高阶指南
+### Vue 与 Web Components
+```
+Web Components是一组Web原生API的总称，允许开发人员创建可重用的自定义组件。
+我们认为Vue和Web Components大体上是互补的技术。Vue能很好地解析和创建自定义元素。不论是
+在将自定义元素整合到已有的Vue应用中，还是使用Vue构建和分发自定义元素，你都能获得很好的支持。
+
+## 在Vue中使用自定义元素
+Vue 在 Custom Elements Everywhere 测试中获得了 100% 的完美分数。
+Vue 应用程序中解析出的自定义元素大体上和原生 HTML 元素相同，但需要牢记以下几点：
+
+### 跳过组件的解析
+
+默认情况下，Vue会优先尝试将一个非原生的HTML标签解析为一个注册的Vue组件，如果失败则会将
+其渲染为自定义元素。这种行为会导致在开发模式下的Vue发出”failed to resolve component“
+的警告。如果你希望Vue能将某些确切的元素作为自定义元素处理并跳过组件解析，请指定
+compilerOptions.isCustomElement 选项。
+
+如果你正在构建步骤中使用Vue，则此选项需要通过构建配置传递，因为这是一个编译时选项。
+
+### 浏览器内配置示例
+// 仅当使用浏览器内编译时有效
+// 如果你正在使用构建工具，请查看下方的配置示例
+app.config.compilerOptions.isCustomElement = tag => tag.includes('-')
+
+### Vite 配置示例
+// vite.config.js
+import vue from '@vitejs/plugin-vue'
+
+export default {
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          // 将所有包含短横线的标签作为自定义元素处理
+          isCustomElement: tag => tag.includes('-')
+        }
+      }
+    })
+  ]
+}
+
+### Vue CLI 配置示例
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => ({
+        ...options,
+        compilerOptions: {
+          // 将所有以 ion- 开头的标签作为自定义元素处理
+          isCustomElement: tag => tag.startsWith('ion-')
+        }
+      }))
+  }
+}
+```
+
+
 
 #### 组合式 API 基础
 
