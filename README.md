@@ -2157,7 +2157,7 @@ render() {
 }
 
 ## 使用JavaScript代替模板功能
-v-if和v-for
+## v-if和v-for
 只要在原生的JavaScript中可以轻松完成的操作，Vue的渲染函数就不会提供专有的替代方法。比如，
 在模板中使用的v-if和v-for：
 <ul v-if="items.length">
@@ -2176,6 +2176,42 @@ render() {
     return h('p','No items found')
   }
 }
+
+## v-model
+
+v-model指令扩展为modelValue和onUpdate:modelValue在模板编译过程中，我们必须自己提供这些prop：
+props: ['modelValue'],
+emits: ['update:modelValue'],
+render() {
+  return h(SomeComponent,{
+    modelValue:this.modelValue,
+    'onUpdate:modelValue':value => this.$emit('update:modelValue',value) 
+  })
+}
+
+## v-on
+
+我们必须为事件处理程序提供一个正确的prop名称，例如，要处理click事件，prop名称应该是onClick。
+render() {
+  return h('div',{
+    onClick:$event => console.log('clicked',$event.target)
+  })
+}
+
+## 事件修饰符
+
+对于.passive、.capture和.once事件修饰符，可以使用驼峰写法将他们拼接在事件名后面：
+实例：
+render() {
+  return h('input',{
+    onClickCapture: this.doThisInCapturingMode,
+    onKeyupOnce: this.doThisOnce,
+    onMouseoverOnceCapture: this.doThisOnceInCapturingMode
+  })
+}
+
+对于所有其它的修饰符，私有前缀都不是必须的，因为你可以在事件处理函数中使用事件方法：
+
 ```
 
 
