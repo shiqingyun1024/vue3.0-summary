@@ -2244,6 +2244,65 @@ render() {
 ## 插槽
 
 你可以通过this.$slots访问静态插槽的内容，每个插槽都是一个VNode数组：
+
+render() {
+  // `<div><slot></slot></div>`
+  return h('div', {}, this.$slots.default())
+}
+
+<!-- 类似于具名插槽 -->
+props: ['message'],
+render() {
+  // `<div><slot :text="message"></slot></div>`
+  return h('div', {}, this.$slots.default({
+    text: this.message
+  }))
+}
+
+要使用渲染函数将插槽传递给子组件，请执行以下操作：
+
+const { h, resolveComponent } = Vue
+
+render() {
+  // `<div><child v-slot="props"><span>{{ props.text }}</span></child></div>`
+  return h('div', [
+    h(
+      resolveComponent('child'),
+      {},
+      // 将 `slots` 以 { name: props => VNode | Array<VNode> } 的形式传递给子对象。
+      {
+        default: (props) => Vue.h('span', props.text)
+      }
+    )
+  ])
+}
+
+插槽以函数的形式传递，允许子组件控制每个插槽内容的创建。任何响应式数据都应该在插槽函数内访问，
+以确保它被注册为子组件的依赖关系，而不是父组件。相反，对 resolveComponent 的调用应该在插槽函数之外进行，
+否则它们会相对于错误的组件进行解析。
+
+// `<MyButton><MyIcon :name="icon" />{{ text }}</MyButton>`
+render() {
+  // 应该是在插槽函数外面调用 resolveComponent。
+  const Button = resolveComponent('MyButton')
+  const Icon = resolveComponent('MyIcon')
+
+  return h(
+    Button,
+    null,
+    {
+      // 使用箭头函数保存 `this` 的值
+      default: (props) => {
+        // 响应式 property 应该在插槽函数内部读取，
+        // 这样它们就会成为 children 渲染的依赖。
+        return [
+          h(Icon, { name: this.icon }),
+          this.text
+        ]
+      }
+    }
+  )
+}
 ```
 
 
