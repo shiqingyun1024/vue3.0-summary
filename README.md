@@ -2340,6 +2340,130 @@ render() {
 
 就像is，resolveDynamicComponent 支持传递一个组件名称、一个HTML元素名称或一个组件选项对象。
 通常这种程度的灵活性是不需要的。通常resolveDynamicComponent可以被换做一个更直接的替代方案。
+
+例如，如果我们只需要支持组件名称，那么可以使用resolveComponent来代替。
+如果VNode始终是一个HTML元素，那么我们可以直接把它的名字传递给h：
+// '<component :is="bold ? 'strong':'em'"></component>'
+render() {
+  return h(this.bold?'strong':'em')
+}
+同样，如果传递给is的值是一个组件选项对象，那么不需要解析什么，可以直接作为h的第一个参数传递。
+与<template>标签一样，<component>标签仅在模板中作为语法占位符需要，当迁移到render函数时，
+应被丢弃。
+
+## 自定义指令
+可以使用 withDirectives 将自定义指令应用于 VNode：
+const { h, resolveDirective, withDirectives } = Vue
+
+// ...
+
+// <div v-pin:top.animate="200"></div>
+render(){
+  const pin = resolveDirective('pin')
+
+  return withDirectives(h('div'),[
+    [pin,200,'top',{animate:true}]
+  ])
+}
+
+resolveDirective是模板内部用来解析指令名称的同一个函数。只有当你还没有直接访问指令的定义
+对象时，才需要这样做。
+
+## 内置组件
+诸如<kepp-alive>、<transition>、<transition-group>和<teleport>等内置组件默认并没
+有被全局注册。这使得打包工具可以tree-shake，因此这些组件只会在被用到的时候被引入构建。不过这
+也意味着我们无法通过resolveComponent 或 resolveDynamicComponent访问它们。
+
+在模板中这些组件会被特殊处理，即在它们被用到的时候自动导入。当我们编写自己的render函数时
+，需要自行导入它们：
+const { h, KeepAlive, Teleport, Transition, TransitionGroup } = Vue
+// ...
+render(){
+  return h(Transition,{mode:'out-in'},/*...*/)
+}
+
+## 渲染函数的返回值
+在我们目前看过的所有示例中，render函数返回的是单个根VNode。但其实也有别的选项。
+返回一个字符串时会创建一个文本VNode，而不被包裹任何元素：
+
+render(){
+  return 'hello world!'
+}
+
+我们也可以返回一个子元素数组，而不把它们包裹在一个根结点里。这会创建一个片段（fragment）：
+// 相当于模板’Hello<br>world!‘
+render(){
+  return [
+    'Hello',
+    h('br'),
+    'world!'
+  ]
+}
+
+可能是因为数据依然在加载中的关系，组件不需要渲染，这时它可以返回null。这样我们在DOM中会
+渲染一个注释节点。
+
+## JSX
+如果你写了很多渲染函数，可能会觉得下面这样的代码写起来很痛苦：
+h(
+  'anchored-heading',
+  {
+    level: 1
+  },
+  {
+    default: () => [h('span', 'Hello'), ' world!']
+  }
+)
+
+特别是对应的模板如此简单的情况下：
+<anchored-heading :level="1"> <span>Hello</span> world! </anchored-heading>
+这就是为什么会有一个Babel插件，用于在Vue中使用JSX语法，它可以让我们回到更接近于模板的语法上。
+
+import AnchoredHeading from './AnchoredHeading.vue'
+
+const app = createApp({
+  render() {
+    <!-- JSX的写法 -->
+    return (
+      <AnchoredHeading level={1}>
+        <span>Hello</span> world!
+      </AnchoredHeading>
+    )
+  }
+})
+
+app.mount('#demo')
+有关 JSX 如何映射到 JavaScript 的更多信息，请参阅使用文档。
+
+## 函数式组件
+
+函数式组件是自身没有任何状态的组件的另一种形式。它们在渲染过程中不会创建组件实例，并跳过常规
+的组件生命周期。
+
+我们使用的是一个简单函数，而不是一个选项对象，来创建函数式组件。该函数实际上就是该组件的render函数。
+而因为函数式组件里没有this引用，Vue会把props当作第一个参数传入：
+const FunctionalComponent = (props, context) => {
+  // ...
+}
+
+第二个参数 context 包含三个 property：attrs、emit 和 slots。
+它们分别相当于实例的 $attrs、$emit 和 $slots 这几个 property。
+
+大多数常规组件的配置选项在函数式组件中都不可用。然而我们还是可以把props和emits作为
+property加入，以达到定义它们的目的：
+FunctionalComponent.props = ['value']
+FunctionalComponent.emits = ['click']
+
+如果这个 props 选项没有被定义，那么被传入函数的 props 对象就会像 attrs 一样会包含所有 attribute。
+除非指定了 props 选项，否则每个 prop 的名字将不会基于驼峰命名法被一般化处理。
+
+函数式组件可以像普通组件一样被注册和消费。如果你将一个函数作为第一个参数传入 h，
+它将会被当作一个函数式组件来对待。
+
+## 模板编译
+你可能会有兴趣知道，Vue 的模板实际上被编译成了渲染函数。这是一个实现细节，通常不需要关心。
+但如果你想看看模板的功能具体是怎样被编译的，可能会发现会非常有意思。
+下面是一个使用 Vue.compile 来实时编译模板字符串的简单示例：
 ```
 
 
