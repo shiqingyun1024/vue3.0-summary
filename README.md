@@ -2303,6 +2303,43 @@ render() {
     }
   )
 }
+如果一个组件从它的父组件中接收到插槽，它们可以直接传递给子组件。
+render() {
+  return h(Panel,null,this.$slots)
+}
+也可以会根据情况单独传递或包裹住。
+render() {
+  return h(
+    Panel,
+    null,
+    {
+      //如果我们想传递一个槽函数，我们可以通过
+      header: this.$slots.header,
+      //如果我们需要以某种方式对插槽进行操作，
+      //那么我们需要用一个新的函数来包裹它
+      dafault: (props)=>{
+        const children = this.$slots.default ? this.$slots.default(props):[]
+
+        return children.concat(h('div','Extra child'))
+      }
+    }
+  )
+}
+
+## <component> 和 is
+在底层实现里，模板使用 resolveDynamicComponent 来实现 is attribute。如果我们在 render 
+函数中需要 is 提供的所有灵活性，我们可以使用同样的函数：
+const { h,resolveDynamicComponent } = Vue
+// ...
+
+// `<component :is="name"></component>`
+render() {
+  const Component = resolveDynamicComponent(this.name)
+  return h(Component)
+}
+
+就像is，resolveDynamicComponent 支持传递一个组件名称、一个HTML元素名称或一个组件选项对象。
+通常这种程度的灵活性是不需要的。通常resolveDynamicComponent可以被换做一个更直接的替代方案。
 ```
 
 
