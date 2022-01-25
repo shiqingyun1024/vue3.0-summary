@@ -2648,6 +2648,18 @@ module.exports = {
       }))
   }
 }
+
+### 传递DOM Property
+由于DOM attribute只能是字符串，因此我们得将复杂数据作为DOM property传递给自定义元素。在自
+定义元素上配置prop时，Vue3会自动使用in操作符检查是否存在DOM-property，如果此键存在则会优先
+将值配置为一个DOM property。也就是说大多数情况下，如果自定义元素遵守推荐的最佳实践，则无需考虑这一点。
+
+但是，在极少数情况下，数据必须作为DOM property传递，但自定义元素没有正确定义/反映property
+（导致in检查失败）。此时，可以使用.prop修饰符强制将一个v-bind绑定设置为一个DOM property:
+
+<my-element :user.prop="{ name: 'jack' }"></my-element>
+<!-- 等效的简写 -->
+<my-element .user="{ name: 'jack' }"></my-element>
 ```
 
 
