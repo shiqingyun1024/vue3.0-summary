@@ -2660,6 +2660,40 @@ module.exports = {
 <my-element :user.prop="{ name: 'jack' }"></my-element>
 <!-- 等效的简写 -->
 <my-element .user="{ name: 'jack' }"></my-element>
+
+### 使用Vue构建自定义元素
+自定义元素的一大好处就是它们可以与任何框架一起使用，甚至可以在没有框架的情况下使用。当你需要
+向可能使用不同前端技术栈的终端用户分发组件时，或者希望向最终应用程序隐藏其所用组件的实现细节时，
+使用自定义元素非常适合。
+
+#### defineCustomElement
+Vue支持使用 defineCustomElement 方法创建自定义元素，并且使用与Vue组件完全一致的API。该方法
+接受与defineComponent相同的参数，但是会返回一个扩展自HTMLElement的自定义元素构造函数：
+
+<my-vue-element></my-vue-element>
+import { defineCustomElement } from 'vue'
+
+const MyVueElement = defineCustomElement({
+  // 在此提供正常的 Vue 组件选项
+  props: {},
+  emits: {},
+  template: `...`,
+
+  // defineCustomElement 独有特性: CSS 会被注入到隐式根 (shadow root) 中
+  styles: [`/* inlined css */`]
+})
+
+// 注册自定义元素
+// 注册完成后，此页面上的所有的 `<my-vue-element>` 标签会被更新
+customElements.define('my-vue-element', MyVueElement)
+
+// 你也可以编程式地实例化这个元素：
+// (只能在注册后完成此操作)
+document.body.appendChild(
+  new MyVueElement({
+    // initial props (optional)
+  })
+)
 ```
 
 
