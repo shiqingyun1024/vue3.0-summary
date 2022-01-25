@@ -2717,6 +2717,27 @@ props: {
 
 <my-element selected index="1"></my-element>
 在组件中，selected 会被转换为 true (boolean)，index 会被转换为 1 (number)。
+
+ 
+#### 事件
+在自定义元素中，通过 this.$emit 或在 setup 中的 emit 发出的事件会被调度为原生 CustomEvents。
+附加的事件参数 (payload) 会作为数组暴露在 CustomEvent 对象的 details property 上。
+
+#### 插槽
+在组件内部，可以像往常一样使用<slot/>渲染插槽。但是在解析最终生成的元素时，它只接受原生插槽语法：
+不支持作用域插槽。
+传递命名插槽时，请使用slot attribute而非v-slot指令：
+<my-element>
+  <div slot="named">hello</div>
+</my-element>
+
+#### Provide / Inject
+Provide / Inject API 和组合式 API 中的 Provide / Inject 在 Vue 定义的自定义元素之间可以正常工作。
+但是请注意这仅适用于自定义元素之间，即 Vue 定义的自定义元素将无法注入非自定义元素的 Vue 组件提供的属性。
+
+## 将SFC作为自定义元素
+defineCustomElement也适用于Vue单文件组件（SFC）。但是，在默认工具链配置下，生产构建时SFC内部的<style>
+会被提取并合并到单独的CSS文件中。当使用SFC作为自定义元素时，通常需要将<style>标签注入自定义元素的隐式根。
 ```
 
 
