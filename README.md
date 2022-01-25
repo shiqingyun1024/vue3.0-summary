@@ -2694,6 +2694,29 @@ document.body.appendChild(
     // initial props (optional)
   })
 )
+
+#### 生命周期
+- 当元素的connectedCallback被首次调用时，Vue自定义元素会在其隐式根部挂载一个内部的
+Vue组件实例。
+- 当元素的disconnectedCallback 被调用时，Vue会在很短的时间后检查此元素是否已被移出页面。
+  如果元素仍在文档中，说明是移动，组件实例将被保留；
+  如果元素已被移出文档，说明是移除，组件实例将被卸载。
+
+#### Props
+- 所有使用props选项声明的prop都将在自定义元素上定义为property。Vue将在合适的时候自动处理
+attribute/property之间的映射。
+   Attribute总是映射为相应的property。
+   基础类型（string、boolean 或 number）的property会被映射为attribute。
+- Vue也会自动将声明为Boolean或Number类型的attribute prop (始终为字符串)转换为所需的类型。
+例如给出以下 prop 声明：  
+props: {
+  selected: Boolean,
+  index: Number
+}
+以及自定义元素用法：
+
+<my-element selected index="1"></my-element>
+在组件中，selected 会被转换为 true (boolean)，index 会被转换为 1 (number)。
 ```
 
 
