@@ -2738,6 +2738,34 @@ Provide / Inject API 和组合式 API 中的 Provide / Inject 在 Vue 定义的�
 ## 将SFC作为自定义元素
 defineCustomElement也适用于Vue单文件组件（SFC）。但是，在默认工具链配置下，生产构建时SFC内部的<style>
 会被提取并合并到单独的CSS文件中。当使用SFC作为自定义元素时，通常需要将<style>标签注入自定义元素的隐式根。
+
+要选用此模式，只需使用 .ce.vue 作为文件拓展名即可：
+import { defineCustomElement } from 'vue'
+import Example from './Example.ce.vue'
+
+console.log(Example.styles) // ["/* 内联的css */"]
+
+// 转换为自定义元素构造器
+const ExampleElement = defineCustomElement(Example)
+
+// 注册
+customElements.define('my-example',ExampleElement)
+
+如果你希望指定应在自定义元素模式下导入的文件（例如将所有SFC视为自定义元素），你可以将
+customElement 选项传递给相应的构建插件：
+@vitejs/plugin-vue
+vue-loader
+
+## Vue 自定义元素库的提示
+如果使用 Vue 构建自定义元素，则此元素将依赖于 Vue 的运行时。这会导致一个 16kb 左右的基础大小开销 
+(具体取决于使用了多少特性)。这意味着如果你准备发布单个自定义元素，使用 Vue 可能不是最佳方案——
+你可能想要使用纯 JavaScript，petite-vue，或是其他专注于轻量化运行时的框架。
+但是，如果你要发布具有复杂逻辑的自定义元素集合，那么这点基础大小就会显得合理了，
+因为 Vue 可以使用非常精简的代码耦合每个组件。你准备发布的元素越多，开销权衡就越好。
+
+如果自定义元素会在同样使用 Vue 的项目中使用，你可以选择从构建的包中外部化 Vue，
+这样元素就会使用与宿主应用程序相同的 Vue 副本。
+
 ```
 
 ```
