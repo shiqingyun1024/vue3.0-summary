@@ -2766,6 +2766,43 @@ vue-loader
 如果自定义元素会在同样使用 Vue 的项目中使用，你可以选择从构建的包中外部化 Vue，
 这样元素就会使用与宿主应用程序相同的 Vue 副本。
 
+我们推荐你提供一个导出独立元素的构造函数，这样你的用户就可以灵活地按需导入它们并使用他们所需的标签名注册自定义元素。
+你还可以导出一个能自动注册所有元素的函数以便于使用。这是一个 Vue 自定义元素库示例的入口点：
+
+import { defineCustomElement } from 'vue'
+import Foo from './MyFoo.ce.vue'
+import Bar from './MyBar.ce.vue'
+
+const MyFoo = defineCustomElement(Foo)
+const MyBar = defineCustomElement(Bar)
+
+// 导出独立的元素
+export { MyFoo, MyBar }
+
+export function register() {
+  customElements.define('my-foo', MyFoo)
+  customElements.define('my-bar', MyBar)
+}
+
+如果你有许多组件，你可以利用构建工具提供的功能，例如Vite的glob导入或者是webpack的
+require.context.
+
+## 对比Web Components 与 Vue 组件
+一些开发人员认为应该避免使用框架专有的组件模型，并且仅使用自定义元素已便于应用程序“面向未来”。
+我们将在此处尝试解释为什么我们认为这种看法过于简单化了问题。
+
+自定义元素和 Vue 组件之间确实存在一定程度的功能重叠：它们都允许我们定义具有数据传递、
+事件发出和生命周期管理功能的可重用组件。然而，Web Components API 是相对低级和简单的。
+为了构建一个实际可用的应用程序，我们需要很多平台没有涵盖的附加功能：
+
+- 一个声明式的、高效的模板系统；
+
+- 一个有助于跨组件逻辑提取和重用的响应式状态管理系统；
+
+- 一个能在服务器端渲染组件并在客户端集成的高效方法(SSR)，这对于 SEO 和 Web 关键指标 (例如 LCP) 来说很重要。
+原生自定义元素 SSR 通常涉及在 Node.js 中模拟 DOM，然后序列化被改变的 DOM，而 Vue SSR 会尽可能编译为字符串连接，
+后者的效率更高。
+
 ```
 
 ```
