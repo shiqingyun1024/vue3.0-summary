@@ -2918,6 +2918,74 @@ const createEffect = fn => {
 Vue 会将该对象包裹在一个带有 get 和 set 处理程序的 Proxy 中。
 Proxy 是在 ES6 中引入的，它使 Vue 3 避免了 Vue 早期版本中存在的一些响应性问题。
 
+那看起来灵敏，不过，需要一些Proxy的知识才能理解！所以让我们深入了解一下。有很多关于Proxy
+的文档，但你真正需要知道的是， Proxy是一个对象，它包装了另一个对象，并允许你拦截对该对象的任何交互。
+
+我们这样使用它：new Proxy(target,handler)
+const dinner = {
+  meal:'tacos'
+}
+
+const handler = {
+  get(target,property) {
+    console.log('intercepted!')
+    return target[property]
+  }
+}
+
+const proxy = new Proxy(dinner,handler)
+console.log(proxy.meal)
+
+// intercepted!
+// tacos
+
+这里我们截获了读取目标对象 property 的举动。像这样的处理函数也称为一个捕捉器 (trap)。
+有许多可用的不同类型的捕捉器，每个都处理不同类型的交互。
+
+除了控制台日志，我们可以在这里做任何我们想做的事情。如果我们愿意，我们甚至可以不返回实际值。
+这就是为什么 Proxy 对于创建 API 如此强大。
+
+使用 Proxy 的一个难点是 this 绑定。我们希望任何方法都绑定到这个 Proxy，而不是目标对象，这样我们也可以拦截它们。
+值得庆幸的是，ES6 引入了另一个名为 Reflect 的新特性，它允许我们以最小的代价消除了这个问题：
+** 注意：Proxy和Reflect都需要补一下es6知识了。**
+
+const dinner = {
+  meal: 'tacos'
+}
+
+const handler = {
+  get(target, property, receiver) {
+    return Reflect.get(...arguments)
+  }
+}
+
+const proxy = new Proxy(dinner, handler)
+console.log(proxy.meal)
+
+// tacos
+
+使用 Proxy 实现响应性的第一步就是跟踪一个 property 何时被读取。
+我们在一个名为 track 的处理器函数中执行此操作，该函数可以传入 target 和 property 两个参数。
+const dinner = {
+  meal: 'tacos'
+}
+
+const handler = {
+  get(target, property, receiver) {
+    track(target, property)
+    return Reflect.get(...arguments)
+  }
+}
+
+const proxy = new Proxy(dinner, handler)
+console.log(proxy.meal)
+
+// tacos
+
+这里没有展示 track 的实现。它将检查当前运行的是哪个副作用，并将其与 target 和 property 记录在一起。
+这就是 Vue 如何知道这个 property 是该副作用的依赖项。
+
+最后，我们需要在 property 值更改时重新运行这个副作用。为此，我们需要在代理上使用一个 set 处理函数：
 ```
 
 
