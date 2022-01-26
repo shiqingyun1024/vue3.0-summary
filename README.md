@@ -2876,6 +2876,30 @@ Vue 通过一个副作用 (effect) 来跟踪当前正在运行的函数。副作
 为了更好地理解这一点，让我们尝试脱离 Vue 实现类似的东西，以看看它如何工作。
 
 我们需要的是能够包裹总和的东西，像这样：
+
+createEffect(() => {
+  sum = val1 + val2
+})
+
+我们需要 createEffect 来跟踪和执行。我们的实现如下：
+
+// 维持一个执行副作用的栈
+const runningEffects = []
+
+const createEffect = fn => {
+  // 将传来的 fn 包裹在一个副作用函数中
+  const effect = () => {
+    runningEffects.push(effect)
+    fn()
+    runningEffects.pop()
+  }
+
+  // 立即自动执行副作用
+  effect()
+}
+
+当我们的副作用被调用时，在调用fn之前，它会把自己推到runningEffects数组中。
+这个数组可以用来检查当前正在运行的副作用。
 ```
 
 
