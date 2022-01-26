@@ -2986,6 +2986,35 @@ console.log(proxy.meal)
 这就是 Vue 如何知道这个 property 是该副作用的依赖项。
 
 最后，我们需要在 property 值更改时重新运行这个副作用。为此，我们需要在代理上使用一个 set 处理函数：
+
+const dinner = {
+  meal: 'tacos'
+}
+
+const handler = {
+  get(target, property, receiver) {
+    track(target, property)
+    return Reflect.get(...arguments)
+  },
+  set(target, property, value, receiver) {
+    trigger(target, property)
+    return Reflect.set(...arguments)
+  }
+}
+
+const proxy = new Proxy(dinner, handler)
+console.log(proxy.meal)
+
+// tacos
+
+还记得前面的表格吗？现在，我们对 Vue 如何实现这些关键步骤有了答案：
+1、当一个值被读取时进行追踪：proxy 的 get 处理函数中 track 函数记录了该 property 和当前副作用。
+2、当某个值改变时进行检测：在 proxy 上调用 set 处理函数。
+3、重新运行代码来读取原始值：trigger 函数查找哪些副作用依赖于该 property 并执行它们。
+
+该被代理的对象对于用户来说是不可见的，但是在内部，它们使 Vue 能够在 property 的值被访问或修改的情况下进行依赖跟踪和变更通知。
+有一点需要注意，控制台日志会以不同的方式对 proxy 对象进行格式化，因此你可能需要安装 vue-devtools，以提供一种更易于检查的界面。
+
 ```
 
 
