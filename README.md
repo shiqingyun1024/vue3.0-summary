@@ -3079,6 +3079,29 @@ const wrapped = new Proxy(obj,handlers)
 consoel.log(obj === wrapped) // false
 其他依赖严格等于比较的操作也会受到影响，例如 .includes() 或 .indexOf()
 
+这里的最佳实践是永远不要持有对原始对象的引用，而只使用响应式版本。
+(**注意：这里的最佳实践是永远不要持有对原始对象的引用，而只使用响应式版本**)
+const obj = reactive({
+  count:0
+}) // 未引用原始
+
+这确保了等值的比较和响应性的行为都符合预期。
+
+请注意，Vue不会在Proxy中包裹数字或字符串等原始值，所以你仍然可以对这些值直接使用 === 来比较：
+const obj = reactive({
+  count:0
+})
+
+console.log(obj.count === 0) // true
+
+## 如何让渲染响应变化
+一个组件的模板被编译成一个render函数。渲染函数创建VNodes，描述该组件应该如何被渲染。它被包裹在一个副作用中，
+允许Vue在运行时跟踪被“触达”的property。
+
+一个render函数在概念上与一个computed property非常相似。Vue并不确切地追踪依赖关系是如何被使用的，它只知道
+在函数运行的某个时间点上使用了这些依赖关系。如果这些property中任何一个随后发生了变化，它将触发副作用再次运行，
+重新运行render函数以生成新的VNodes。然后这些举动被用来对DOM进行必要的修改。
+
 ```
 
 
