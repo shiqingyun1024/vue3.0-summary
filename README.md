@@ -3246,7 +3246,32 @@ original.count++
 copy.count++ // 警告: "Set operation on key 'count' failed: target is readonly."
 
 ```
+### 响应式计算和侦听
+```
+本节使用单文件组件语法作为代码示例
 
+## 计算值
+有时我们需要依赖于其他状态的状态---- 在Vue中，这是用组件计算属性处理的，以直接创建计算值，
+我们可以使用computed函数；它接受getter函数并为getter返回一个不可变的响应式ref对象。
+const count = ref(1)
+const plusOne = computed(()=> count.value + 1)
+
+console.log(plusOne.value) // 2
+plusOne.value++ // error ("**注意：这是不可变的，所以修改的时候会报错**")
+
+或者，它可以使用一个带有get和set函数的对象来创建一个可写的ref对象。
+const count = ref(1)
+const plusOne = computed({
+  get: () => count.value + 1,
+  set: val => {
+    count.value = val - 1
+  }
+})
+
+plusOne.value = 1
+console.log(count.value) // 0
+
+```
 
 
 
