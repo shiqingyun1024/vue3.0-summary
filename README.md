@@ -3171,6 +3171,31 @@ nested: reactive({
   count
 })
 
+## 访问响应式对象
+当ref作为响应式对象的property被访问或更改时，为使其行为类似于普通property，它会自动解包内部值：
+const count = ref(0)
+const state = reactive({
+  count
+})
+console.log(state.count) // 0
+state.count = 1
+console.log(state.count) // 1
+
+如果将新的ref赋值给现有ref的property，将会替换旧的ref:
+const otherCount = ref(2)
+state.count = otherCount
+console.log(state.count) // 2
+console.log(count.value) // 1
+
+Ref 解包仅发生在被响应式 Object 嵌套的时候。当从 Array 或原生集合类型如 Map访问 ref 时，不会进行解包：
+const books = reactive([ref('Vue 3 Guide')])
+// 这里需要 .value
+console.log(books[0].value)
+
+const map = reactive(new Map([['count', ref(0)]]))
+// 这里需要 .value
+console.log(map.get('count').value)
+
 ```
 
 
