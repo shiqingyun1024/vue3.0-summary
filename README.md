@@ -3124,6 +3124,53 @@ Vue中响应式状态的基本用例是我们可以在渲染期间使用它。�
 
 在响应式基础API章节你可以学习更多关于reactive的内容。
 
+## 创建独立的响应式值作为 refs
+想象一下，我们有一个独立的原始值（例如，一个字符串），我们想让它变成响应式的。当然，我们可以创建一个拥有相同
+字符串property的对象，并将其传递给reactive。Vue为我们提供了一个可以做相同事情的方法 --- ref：
+import { ref } from 'vue'
+
+const count = ref(0)
+
+ref会返回一个可变的响应式对象，该对象作为一个响应式的引用维护着它内部的值，这就是ref名称的来源。该对象只包含
+一个名为value的property：
+
+import { ref } from ’vue‘
+const count = ref(0)
+console.log(count.value) // 0
+
+count.value++
+console.log(count.value) // 1
+
+## Ref解包
+当ref作为渲染上下文(从setup()中返回的对象)上的property返回并可以在模板中被访问时，它将自动浅层次解包内部值。
+只有访问嵌套的ref时需要在模板中添加.value：**注意：只有访问嵌套的ref时需要在模板中添加.value **
+<template>
+  <div>
+    <span>{{ count }}</span>
+    <button @click="count++">Increment count</button>
+    <button @click="nested.count.value++">Nested Increment count</button>
+  </div>
+</template>
+<script>
+  import { ref } from 'vue'
+  export default {
+    setup() {
+      const count = ref(0)
+      return {
+        count,
+        nested:{
+          count
+        }
+      }
+    }
+  }
+</script>
+TIP
+如果你不想要访问实际的对象实例，可将其用reactive包裹：
+nested: reactive({
+  count
+})
+
 ```
 
 
