@@ -3196,6 +3196,39 @@ const map = reactive(new Map([['count', ref(0)]]))
 // 这里需要 .value
 console.log(map.get('count').value)
 
+## 响应式状态解构
+当我们想使用大型响应式对象的一些property时，可能很想使用ES6解构来获取我们想要的property：
+import { reactive } from 'vue'
+
+const book = reactive({
+  author: 'Vue Team',
+  year: '2020',
+  title: 'Vue 3 Guide',
+  description: 'You are reading this book right now ;)',
+  price: 'free'
+})
+
+let { author,title } = book
+
+遗憾的是，使用解构的两个property的响应式都会丢失。对于这种情况，我们需要将我们的响应式对象转换为
+一组ref。这些ref将保留与源对象的响应式关联：
+import { reactive,toRefs } from 'vue'
+
+const book = reactive({
+  author: 'Vue Team',
+  year: '2020',
+  title: 'Vue 3 Guide',
+  description: 'You are reading this book right now ;)',
+  price: 'free'
+})
+
+let { author,title } = toRefs(book)
+
+title.value = 'Vue 3 Detailed Guide' // 我们需要使用.value作为标题，现在是ref
+console.log(book.title) // 'Vue 3 Detailed Guide'
+
+你可以在 Refs API 部分中了解更多有关 refs 的信息
+
 ```
 
 
