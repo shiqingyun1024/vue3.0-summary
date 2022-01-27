@@ -3103,6 +3103,28 @@ console.log(obj.count === 0) // true
 重新运行render函数以生成新的VNodes。然后这些举动被用来对DOM进行必要的修改。
 
 ```
+### 响应性基础
+```
+## 声明响应式状态
+要为JavaScript对象创建响应式状态，可以使用reactive方法：
+import { reactive } from 'vue'
+
+// 响应式状态
+const state = reactive({
+  count: 0
+})
+
+reactive 相当于Vue2.x中的Vue.observable() API，为避免与RxJS中的observables混淆因此对其重命名。
+该API返回一个响应式的对象状态。该响应式转换是“深度转换”---它会影响传递对象的所有嵌套property。
+
+Vue中响应式状态的基本用例是我们可以在渲染期间使用它。因为依赖跟踪的关系，当响应式状态改变时视图会自动更新。
+
+这就是Vue响应式系统的本质。当从组件中的data() 返回一个对象时，它在内部交由reactive()使其成为响应式对象。模板会
+被编译成能够使用这些响应式property的渲染函数。
+
+在响应式基础API章节你可以学习更多关于reactive的内容。
+
+```
 
 
 
