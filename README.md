@@ -3271,6 +3271,56 @@ const plusOne = computed({
 plusOne.value = 1
 console.log(count.value) // 0
 
+## 调试Computed
+computed可接受一个带有onTrack和onTrigger选项的对象作为第二个参数：
+- onTrack 会在某个响应式 property 或 ref 作为依赖被追踪时调用。
+- onTrigger 会在侦听回调被某个依赖的修改触发时调用。
+所有回调都会收到一个 debugger 事件，其中包含了一些依赖相关的信息。推荐在这些回调内放置一个 debugger 
+语句以调试依赖。
+
+const plusOne = computed(() => count.value + 1, {
+  onTrack(e) {
+    // 当 count.value 作为依赖被追踪时触发
+    debugger
+  },
+  onTrigger(e) {
+    // 当 count.value 被修改时触发
+    debugger
+  }
+})
+// 访问 plusOne，应该触发 onTrack
+console.log(plusOne.value)
+// 修改 count.value，应该触发 onTrigger
+count.value++
+
+onTrack和onTrigger仅在开发模式下生效。
+
+## watchEffect （**注意：这个API很有意思**）
+为了根据响应式状态自动应用和重新应用副作用，我们可以使用 watchEffect 函数。
+它立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数。
+const count = ref(0)
+
+watchEffect(()=>console.log(count.value))
+// -> logs 0
+
+setTimeout(()=>{
+  count.value++
+  // -> log1
+},100)
+
+## 停止侦听
+当watchEffect在组件的setup()函数或生命周期钩子被调用时，侦听器会被链接到该组件的生命周期
+并在组件卸载时自动停止。
+
+在一些情况下，也可以显式调用返回值以停止侦听：
+const stop = watchEffect(()=>{
+  /* ... */
+})
+// later
+stop()
+
+## 清除副作用
+
 ```
 
 
