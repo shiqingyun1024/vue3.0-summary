@@ -3014,6 +3014,70 @@ console.log(proxy.meal)
 
 该被代理的对象对于用户来说是不可见的，但是在内部，它们使 Vue 能够在 property 的值被访问或修改的情况下进行依赖跟踪和变更通知。
 有一点需要注意，控制台日志会以不同的方式对 proxy 对象进行格式化，因此你可能需要安装 vue-devtools，以提供一种更易于检查的界面。
+如果我们要用一个组件重写我们原来的例子，我们可以这样做：
+const vm = createApp({
+  data() {
+    return {
+      val1: 2,
+      val2: 3
+    }
+  },
+  computed: {
+    sum() {
+      return this.val1 + this.val2
+    }
+  }
+}).mount('#app')
+
+console.log(vm.sum) // 5
+
+vm.val1 = 3
+
+console.log(vm.sum) // 6
+
+data返回的对象将被包裹在响应式代理中，并存储为this.$data。Property this.val1和this.val2分别是this.$data.val1
+和this.$data.val2的别名，因此它们通过相同的代理。
+
+Vue将把sum的函数包裹在一个副作用中。当我们试图访问this.sum时，它将运行该副作用来计算数值。包裹$data的响应式代理将会
+当副作用运行时，property  val1和val2被读取了。
+
+从Vue3开始，我们的响应性现在可以在一个独立包中使用。将$data包裹在一个代理中的函数被称为reactive。我们可以自己直接
+调用这个函数，允许我们在不需要使用组件的情况下将一个对象包裹在一个响应式代理中。
+const proxy = reactive({
+  val1:2,
+  val2:3,
+})
+
+在指南接下来的几页中，我们将探索响应性包所暴露的功能。这包括我们已经见过的reactive和watchEffect等函数，以及使用其他
+响应性特性的方法，如不需要创建组件的computed和watch。
+
+## 被代理的对象
+
+Vue在内部跟踪所有已经被转成响应式的对象，所以它总是为同一个对象返回相同的代理。
+
+当从一个响应式代理中访问一个嵌套对象时，该对象在被返回之前也被转换成为一个代理：
+const handler = {
+  get(target, property, receiver) {
+    track(target, property)
+    const value = Reflect.get(...arguments)
+    if (isObject(value)) {
+      // 将嵌套对象包裹在自己的响应式代理中
+      return reactive(value)
+    } else {
+      return value
+    }
+  }
+  // ...
+}
+
+## Proxy vs 原始标识
+
+Proxy的使用确实引入了一个需要注意的新警告：在身份比较方面，被代理对象与原始对象不相等（===）。例如：
+const obj = {}
+const wrapped = new Proxy(obj,handlers)
+
+consoel.log(obj === wrapped) // false
+其他依赖严格等于比较的操作也会受到影响，例如 .includes() 或 .indexOf()
 
 ```
 
