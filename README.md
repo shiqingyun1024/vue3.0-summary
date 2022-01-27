@@ -3229,6 +3229,22 @@ console.log(book.title) // 'Vue 3 Detailed Guide'
 
 你可以在 Refs API 部分中了解更多有关 refs 的信息
 
+## 使用readonly防止更改响应式对象
+有时我们想跟踪响应式对象（ref 或 reactive）的变化，但我们也希望防止在应用程序的某个位置
+更改它。例如，当我们有一个被provide的响应式对象时，我们不想让它在注入的时候被改变。为此，我们
+可以基于原始对象创建一个只读的proxy对象：
+import { reactiive,readonly } from 'vue'
+const original = reactive({ count: 0 })
+
+const copy = readonly(original)
+
+// 通过 original 修改 count，将会触发依赖 copy 的侦听器
+
+original.count++
+
+// 通过 copy 修改 count，将导致失败并出现警告
+copy.count++ // 警告: "Set operation on key 'count' failed: target is readonly."
+
 ```
 
 
