@@ -3415,6 +3415,73 @@ watchEffect(
 
 onTrack 和 onTrigger 只能在开发模式下工作。
 
+## watch
+
+watch API完全等同于组件侦听器property。watch需要侦听特定的数据源，并在回调函数中执行副作用。
+默认情况下，它也是惰性的，即只有当被侦听的源发生变化时才执行回调。
+
+与watchEffect比较，watch允许我们：
+- 懒执行副作用；
+- 更具体地说明什么状态应该触发侦听器重新运行；
+- 访问侦听状态变化前后的值。
+
+## 侦听单个数据源
+
+侦听器数据源可以是返回值的getter函数，也可以直接是ref：
+// 侦听一个getter
+const state = reactive({count:0})
+watch(
+  () => state.count,
+  (count,prevCount) => {
+    <!-- ... -->
+  }
+)
+
+// 直接侦听ref
+const count = ref(0)
+watch(count,(count,prevCount)=>{
+  /*...*/
+})
+
+## 侦听多个数据源
+侦听器还可以使用数组同时侦听多个源：
+const firstName = ref('')
+const lastName = ref('')
+
+watch([firstName,lastName],(newValues,prevValues)=>{
+  console.log(newValues,prevValues)
+})
+
+firstName.value = 'John' // logs: ["John", ""] ["", ""]
+lastName.value = 'Smith' // logs: ["John", "Smith"] ["John", ""]
+
+尽管如此，如果你在同一个函数里同时改变这些被侦听的来源，侦听器仍只会执行一次：
+setup() {
+  const firstName = ref('')
+  const lastName = ref('')
+
+  watch([firstName, lastName], (newValues, prevValues) => {
+    console.log(newValues, prevValues)
+  })
+
+  const changeValues = () => {
+    firstName.value = 'John'
+    lastName.value = 'Smith'
+    // 打印 ["John", "Smith"] ["", ""]
+  }
+
+  return { changeValues }
+}
+
+注意多个同步更改只会触发一次侦听器。
+
+通过更改设置flush: 'sync'，我们可以为每个更改都强制触发侦听器，尽管这通常是不推荐的。或者，可以用
+nextTick等待侦听器在下一步改变之前运行，例如：
+const changeValues = async () => {
+  firstName.value = 'John' // 打印 ["John", ""] ["", ""]
+  await nextTick()
+  lastName.value = 'Smith' // 打印 ["John", "Smith"] ["John", ""]
+}
 ```
 
 
