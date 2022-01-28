@@ -3482,6 +3482,71 @@ const changeValues = async () => {
   await nextTick()
   lastName.value = 'Smith' // 打印 ["John", "Smith"] ["John", ""]
 }
+
+## 侦听响应式对象
+使用侦听器来比较一个数组或对象的值，这些值是响应式的，要求它有一个由值构成的副本。
+const numbers = reactive([1,2,3,4])
+
+watch(
+  ()=> [...numbers],
+  (numbers,prevNumbers)=>{
+    console.log(numbers, prevNumbers)
+  }
+)
+
+numbers.push(5) // logs: [1,2,3,4,5] [1,2,3,4]
+
+尝试检查深度嵌套对象或数组中的 property 变化时，仍然需要 deep 选项设置为 true。
+
+const state = reactive({
+  id:1,
+  attributes: { 
+    name: '',
+  }
+})
+
+watch(
+  ()=>state,
+  (state,prevState)=>{
+    console.log('not deep', state.attributes.name, prevState.attributes.name)
+  }
+)
+
+watch(
+  ()=>state,
+  (state,prevState)=>{
+    console.log('deep', state.attributes.name, prevState.attributes.name)
+  },
+  { deep:true }
+)
+
+state.attribute.name = 'Alex' // 日志: "deep" "Alex" "Alex"
+
+然而，侦听一个响应式对象或数组将始终返回该对象的当前值和上一个状态值的引用。为了完全侦听深度嵌套的对象和数组，可能
+需要对值进行深拷贝。这可以通过诸如 lodash.cloneDeep 这样的实用工具来实现。
+
+import _ from 'lodash'
+
+const state = reactive({
+  id: 1,
+  attributes: {
+    name: '',
+  }
+})
+
+watch(
+  () => _.cloneDeep(state),
+  (state, prevState) => {
+    console.log(state.attributes.name, prevState.attributes.name)
+  }
+)
+
+state.attributes.name = 'Alex' // 日志: "Alex" ""
+
+## 与watchEffect共享的行为
+watch 与 watchEffect共享停止侦听，清除副作用 (相应地 onInvalidate 会作为回调的第三个参数传入)、
+副作用刷新时机和侦听器调试行为。
+
 ```
 
 
