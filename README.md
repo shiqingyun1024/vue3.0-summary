@@ -3320,6 +3320,39 @@ const stop = watchEffect(()=>{
 stop()
 
 ## 清除副作用
+有时副作用函数会执行一些异步的副作用，这些响应需要在其失效时清除（即完成之前状态已改变了）。
+所以侦听副作用传入的函数可以接收一个onInvalidate 函数作入参，用来注册清理失效时的回调。
+当以下情况发生时，这个失效回调会被触发：
+
+- 副作用即将重新执行时
+- 侦听器被停止（如果在setup()或生命周期钩子函数中使用了watchEffect，则在组件卸载时）
+watchEffect(onInvalidate=>{
+  const token = performAsyncOperation(id.value)
+  onInvalidate(() => {
+    // id has changed or watcher is stopped.
+    // invalidate previously pending async operation
+    token.cancel()
+  })
+})
+
+我们之所以是通过传入一个函数去注册失效回调，而不是从回调返回它，是因为返回值对于异步错误处理很重要。
+
+在执行数据请求时，副作用函数往往是一个异步函数：
+const data = ref(null)
+watchEffect(async onInvalidate => {
+  onInvalidate(() => {
+    /* ... */
+  }) // 我们在Promise解析之前注册清除函数
+  data.value = await fetchData(props.id)
+})
+
+我们知道异步函数都会隐式地返回一个Promise，但是清理函数必须要在Promise被resolve之前被注册。
+另外，Vue依赖这个返回的Promise来自动处理Promise链上的潜在错误。
+
+## 副作用刷新时机
+Vue的响应性系统会缓存副作用函数，并异步地刷新它们，这样可以避免同一个“tick”中多个状态改变导致的
+不必要的重复调用。在核心的具体实现中，组件的update函数也是一个被侦听的副作用。当一个用户定义的副
+作用函数进入队列时，默认情况下，会在所有的组件update前执行：
 
 ```
 
