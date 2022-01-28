@@ -3354,6 +3354,67 @@ Vue的响应性系统会缓存副作用函数，并异步地刷新它们，这�
 不必要的重复调用。在核心的具体实现中，组件的update函数也是一个被侦听的副作用。当一个用户定义的副
 作用函数进入队列时，默认情况下，会在所有的组件update前执行：
 
+<template>
+  <div>{{ count }}</div>
+</template>
+
+<script>
+export default {
+  setup() {
+    const count = ref(0)
+
+    watchEffect(() => {
+      console.log(count.value)
+    })
+
+    return {
+      count
+    }
+  }
+}
+</script>
+
+在这例子中：
+- count 会在初始运行时同步打印出来
+- 更改 count 时，将在组件更新前执行副作用。
+
+如果需要在组件更新（例如：当与模板引用一起）后重新运行侦听器副作用，我们可以传递带有flush选项的附加options对象
+（默认为’pre‘）：
+// 在组件更新后触发，这样你就可以访问更新的 DOM。
+// 注意：这也将推迟副作用的初始运行，直到组件的首次渲染完成。
+watchEffect(
+  () => {
+    /* ... */
+  },
+  {
+    flush: 'post'
+  }
+)
+flush选项还接受sync，这将强制效果始终同步触发。然而，这是低效的，应该很少需要。
+
+从 Vue 3.2.0 开始，watchPostEffect 和 watchSyncEffect 别名也可以用来让代码意图更加明显。
+
+## 侦听器调试
+
+onTrack和onTrigger选项可用于调试侦听器的行为。
+- onTrack 将在响应式property或ref作为依赖项被追踪时被调用。
+- onTrigger 将在依赖项变更导致副作用被触发时被调用。
+这两个回调都将接收到一个包含有关所依赖项信息的调试器事件。建议在以下回调中
+编写 debugger 语句来检查依赖关系：
+
+watchEffect(
+  () => {
+    /* 副作用 */
+  },
+  {
+    onTrigger(e) {
+      debugger
+    }
+  }
+)
+
+onTrack 和 onTrigger 只能在开发模式下工作。
+
 ```
 
 
