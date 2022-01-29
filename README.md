@@ -3908,6 +3908,24 @@ const Component = defineComponent({
     }
   }
 })
+## 为 globalProperties 扩充类型
+Vue 3 提供了一个 globalProperties 对象，用来添加可以被任意组件实例访问的全局 property。
+例如一个插件想要注入一个共享全局对象或函数。
+
+// 用户定义
+import axios from 'axios'
+const app = Vue.createApp({})
+app.config.globalProperties.$http = axios
+// 验证数据的插件
+export default {
+  install(app, options) {
+    app.config.globalProperties.$validate = (data: object, rule: object) => {
+      // 检查对象是否合规
+    }
+  }
+}
+
+为了告诉 TypeScript 这些新 property，我们可以使用模块扩充 (module augmentation)
 ```
 
 
