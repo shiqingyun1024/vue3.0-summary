@@ -3785,9 +3785,130 @@ Vue 提供的官方脚手架工具，可让你更快地开始使用 SFC。查阅
 注意，即使不喜欢单文件组件的想法，仍然可以通过使用 src 导入 将 JavaScript 与 CSS 分离到单独的文件中来利用其热重载
 和预编译功能。
 
-
 ```
+### TypeScript 支持
+```
+## NPM 包中的官方声明
+随着应用的增长，静态类型系统可以帮助防止许多潜在的运行时错误，这就是为什么 Vue 3 是用 TypeScript 编写的。
+这意味着在 Vue 中使用 TypeScript 不需要任何其他工具——它具有一等公民支持。
 
+## 推荐配置
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    // 这样就可以对 `this` 上的数据属性进行更严格的推断
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node"
+  }
+}
+
+请注意，必须包含 strict: true (或至少包含 noImplicitThis: true，它是 strict 标志的一部分) 
+才能在组件方法中利用 this 的类型检查，否则它总是被视为 any 类型。
+
+## Webpack 配置
+如果你使用自定义 Webpack 配置，需要配置 ts-loader 来解析 vue 文件里的 <script lang="ts"> 代码块：
+// webpack.config.js
+module.exports = {
+  ...
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      }
+      ...
+
+## 开发工具
+### 项目创建
+Vue CLI 可以生成使用 TypeScript 的新项目，开始：
+# 1. Install Vue CLI, 如果尚未安装
+npm install --global @vue/cli@next
+
+# 2. 创建一个新项目, 选择 "Manually select features" 选项
+vue create my-project-name
+
+# 3. 如果已经有一个不存在TypeScript的 Vue CLI项目，请添加适当的 Vue CLI插件：
+vue add typescript
+
+请确保组件的 script 部分已将语言设置为 TypeScript：
+<script lang="ts">
+  ...
+</script>
+
+或者，如果你想将 TypeScript 与 JSX render 函数结合起来：
+<script lang="tsx">
+  ...
+</script>
+
+## 编辑器支持
+对于使用 TypeScript 开发 Vue 应用程序，我们强烈建议使用 Visual Studio Code，
+它为 TypeScript 提供了很好的开箱即用支持。如果你使用的是单文件组件 (SFCs)，那么可以使用很棒的 Volar extension，
+它在 SFCs 中提供了 TypeScript 推理和许多其他优秀的特性。
+
+WebStorm 同时为 TypeScript 和 Vue 提供内置的支持。其它的 JetBrains IDE 
+对它们也通过内置或免费插件的方式进行支持。
+
+## 定义 Vue 组件
+要让 TypeScript 正确推断 Vue 组件选项中的类型，需要使用 defineComponent 全局方法定义组件：
+import { defineComponent } from 'vue'
+
+const Component = defineComponent({
+  // 已启用类型推断
+})
+如果你使用的是单文件组件，则通常会被写成：
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  // 已启用类型推断
+})
+</script>
+
+## 与 Options API 一起使用
+TypeScript 应该能够在不显式定义类型的情况下推断大多数类型。例如，
+对于拥有一个数字类型的 count property 的组件来说，如果你试图对其调用字符串独有的方法，
+会出现错误：
+
+const Component = defineComponent({
+  data() {
+    return {
+      count: 0
+    }
+  },
+  mounted() {
+    const result = this.count.split('') // => Property 'split' does not exist on type 'number'
+  }
+})
+
+如果你有一个复杂的类型或接口，你可以使用 type assertion 对其进行指明：
+interface Book {
+  title: string
+  author: string
+  year: number
+}
+
+const Component = defineComponent({
+  data() {
+    return {
+      book: {
+        title: 'Vue 3 Guide',
+        author: 'Vue Team',
+        year: 2020
+      } as Book
+    }
+  }
+})
+```
 
 
 
