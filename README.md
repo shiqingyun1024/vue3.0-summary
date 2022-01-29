@@ -3702,6 +3702,63 @@ methods: {
   }
 
 ```
+## 工具
+### 单文件组件
+```
+## 介绍
+Vue单文件组件（又名 *.vue文件，缩写为SFC）是一种特殊的文件格式，
+它允许将Vue组件的模板、逻辑与样式封装在单文件中。下面是SFC示例：
+<script>
+export default {
+  data() {
+    return {
+      greeting: 'Hello World!'
+    }
+  }
+}
+</script>
+
+<template>
+  <p class="greeting">{{ greeting }}</p>
+</template>
+
+<style>
+.greeting {
+  color: red;
+  font-weight: bold;
+}
+</style>
+正如所见，Vue SFC 是经典的 HTML、CSS 与 JavaScript 三个经典组合的自然延伸。
+每个 *.vue 文件由三种类型的顶层代码块组成：<template>、<script> 与 <style>：
+- <script> 部分是一个标准的 JavaScript 模块。它应该导出一个 Vue 组件定义作为其默认导出。
+- <template> 部分定义了组件的模板。
+- <style> 部分定义了与此组件关联的 CSS。
+查阅 SFC 语法规范 查看更多细节
+
+## 工作原理
+Vue SFC 是框架指定的文件格式，必须由 @vue/compiler-sfc 预编译为标准的 JavaScript 与 CSS。
+编译后的 SFC 是一个标准的 JavaScript（ES）模块——这意味着通过正确的构建配置，可以像模块一样导入 SFC：
+
+import MyComponent from './MyComponent.vue'
+
+export default {
+  components: {
+    MyComponent
+  }
+}
+SFC 中的 <style> 标签通常在开发过程中作为原生 <style> 标签注入以支持热更新。
+对于生产环境，它们可以被提取并合并到单个 CSS 文件中。
+
+可以在 Vue SFC Playground 中使用 SFC ，探索其是如何编译的。
+
+在实际项目中，通常会将 SFC 编译器与 Vite 或 Vue CLI（基于 webpack）等构建工具集成在一起，
+Vue 提供的官方脚手架工具，可让你更快地开始使用 SFC。查阅 SFC 工具 部分查看更多细节。
+
+## 为什么要使用 SFC
+
+
+```
+
 
 
 
