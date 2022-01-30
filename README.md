@@ -4154,6 +4154,27 @@ setup() {
   return { modal, openModal }
 }
 请注意你还需要使用可选链操作符或其它方式来确认 modal.value 不是 undefined。
+
+## 类型声明 reactive
+当声明类型 reactive property，我们可以使用接口：
+
+import { defineComponent, reactive } from 'vue'
+
+interface Book {
+  title: string
+  year?: number
+}
+
+export default defineComponent({
+  name: 'HelloWorld',
+  setup() {
+    const book = reactive<Book>({ title: 'Vue 3 Guide' })
+    // or
+    const book: Book = reactive({ title: 'Vue 3 Guide' })
+    // or
+    const book = reactive({ title: 'Vue 3 Guide' }) as Book
+  }
+})
 ```
 
 
