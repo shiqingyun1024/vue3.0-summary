@@ -4143,6 +4143,17 @@ const app = defineComponent({
     return { modal, openModal }
   }
 })
+
+它可以工作，但是没有关于 MyModal 及其可用方法的类型信息。为了解决这个问题，你应该在创建引用时使用 InstanceType：
+
+setup() {
+  const modal = ref<InstanceType<typeof MyModal>>()
+  const openModal = () => {
+    modal.value?.open()
+  }
+  return { modal, openModal }
+}
+请注意你还需要使用可选链操作符或其它方式来确认 modal.value 不是 undefined。
 ```
 
 
