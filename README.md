@@ -4078,6 +4078,71 @@ const Component = defineComponent({
     const filtered = props.message.filter(p => p.value) // 将引发错误: Property 'filter' does not exist on type 'string'
   }
 })
+
+## 类型声明 refs
+Refs 根据初始值推断类型：
+import { defineComponent, ref } from 'vue'
+
+const Component = defineComponent({
+  setup() {
+    const year = ref(2020)
+
+    const result = year.value.split('') // => Property 'split' does not exist on type 'number'
+  }
+})
+
+有时我们可能需要为 ref 的内部值指定复杂类型。我们可以在调用 ref 重写默认推理时简单地传递一个泛型参数：
+const year = ref<string | number>('2020') // year's type: Ref<string | number>
+
+year.value = 2020 // ok!
+
+如果泛型的类型未知，建议将 ref 转换为 Ref<T>。
+
+## 为模板引用定义类型
+有时你可能需要为一个子组件标注一个模板引用，以调用其公共方法。
+例如我们有一个 MyModal 子组件，它有一个打开模态的方法：
+
+import { defineComponent, ref } from 'vue'
+const MyModal = defineComponent({
+  setup() {
+    const isContentShown = ref(false)
+    const open = () => (isContentShown.value = true)
+    return {
+      isContentShown,
+      open
+    }
+  }
+})
+
+我们希望从其父组件的一个模板引用调用这个方法：
+
+import { defineComponent, ref } from 'vue'
+const MyModal = defineComponent({
+  setup() {
+    const isContentShown = ref(false)
+    const open = () => (isContentShown.value = true)
+    return {
+      isContentShown,
+      open
+    }
+  }
+})
+const app = defineComponent({
+  components: {
+    MyModal
+  },
+  template: `
+    <button @click="openModal">Open from parent</button>
+    <my-modal ref="modal" />
+  `,
+  setup() {
+    const modal = ref()
+    const openModal = () => {
+      modal.value.open()
+    }
+    return { modal, openModal }
+  }
+})
 ```
 
 
