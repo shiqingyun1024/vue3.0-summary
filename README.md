@@ -4040,6 +4040,44 @@ const Component = defineComponent({
     }
   }
 })
+
+## 注解 emit
+我们可以为触发的事件注解一个有效载荷。另外，所有未声明的触发事件在调用时都会抛出一个类型错误。
+const Component = defineComponent({
+  emits: {
+    addBook(payload: { bookName: string }) {
+      // perform runtime 验证
+      return payload.bookName.length > 0
+    }
+  },
+  methods: {
+    onSubmit() {
+      this.$emit('addBook', {
+        bookName: 123 // 类型错误！
+      })
+      this.$emit('non-declared-event') // 类型错误！
+    }
+  }
+})
+
+## 与组合式 API 一起使用
+在 setup() 函数中，不需要将类型传递给 props 参数，因为它将从 props 组件选项推断类型。
+
+import { defineComponent } from 'vue'
+
+const Component = defineComponent({
+  props: {
+    message: {
+      type: String,
+      required: true
+    }
+  },
+
+  setup(props) {
+    const result = props.message.split('') // 正确, 'message' 被声明为字符串
+    const filtered = props.message.filter(p => p.value) // 将引发错误: Property 'filter' does not exist on type 'string'
+  }
+})
 ```
 
 
