@@ -3976,6 +3976,36 @@ const Component = defineComponent({
     }
   }
 })
+
+## 注解 Props
+Vue 对定义了 type 的 prop 执行运行时验证。要将这些类型提供给 TypeScript，
+我们需要使用 PropType 指明构造函数：
+
+import { defineComponent, PropType } from 'vue'
+
+interface Book {
+  title: string
+  author: string
+  year: number
+}
+
+const Component = defineComponent({
+  props: {
+    name: String,
+    id: [Number, String],
+    success: { type: String },
+    callback: {
+      type: Function as PropType<() => void>
+    },
+    book: {
+      type: Object as PropType<Book>,
+      required: true
+    },
+    metadata: {
+      type: null // metadata 的类型是 any
+    }
+  }
+})
 ```
 
 
