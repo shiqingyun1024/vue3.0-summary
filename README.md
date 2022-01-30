@@ -3926,7 +3926,58 @@ export default {
 }
 
 为了告诉 TypeScript 这些新 property，我们可以使用模块扩充 (module augmentation)
+在上述示例中，我们可以添加以下类型声明：
+import axios from 'axios'
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    $http: typeof axios
+    $validate: (data: object, rule: object) => boolean
+  }
+}
+我们可以把这些类型声明放在同一个文件里，或一个项目级别的 *.d.ts 文件 
+(例如在 TypeScript 会自动加载的 src/typings 文件夹中)。对于库/插件作者来说，
+这个文件应该被定义在 package.json 的 types property 里。
+
+确认声明文件是一个 TypeScript 模块
+
+为了利用好模块扩充，你需要确认你的文件中至少有一个顶级的 import 或 export，哪怕只是一个 export {}。
+
+在 TypeScript 中，任何包含一个顶级 import 或 export 的文件都被视为一个“模块”。如果类型声明在模块之外，
+该声明会覆盖而不是扩充原本的类型。
+
+关于 ComponentCustomProperties 类型的更多信息，请参阅其在 @vue/runtime-core 中的定义及其 TypeScript 
+测试用例学习更多。
+
+## 注解返回类型
+由于 Vue 声明文件的循环特性，TypeScript 可能难以推断 computed 的类型。
+因此，你可能需要注解计算属性的返回类型。
+import { defineComponent } from 'vue'
+
+const Component = defineComponent({
+  data() {
+    return {
+      message: 'Hello!'
+    }
+  },
+  computed: {
+    // 需要注解
+    greeting(): string {
+      return this.message + '!'
+    },
+
+    // 在使用 setter 进行计算时，需要对 getter 进行注解
+    greetingUppercased: {
+      get(): string {
+        return this.greeting.toUpperCase()
+      },
+      set(newValue: string) {
+        this.message = newValue.toUpperCase()
+      }
+    }
+  }
+})
 ```
+
 
 
 
