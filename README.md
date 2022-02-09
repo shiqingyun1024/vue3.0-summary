@@ -4175,6 +4175,25 @@ export default defineComponent({
     const book = reactive({ title: 'Vue 3 Guide' }) as Book
   }
 })
+
+## 类型声明 computed
+计算值将根据返回值自动推断类型
+
+import { defineComponent,ref,computed } from 'vue'
+
+export default defineComponent({
+  name: 'CounterButton',
+  setup() {
+    let count = ref(0)
+
+    // 只读
+    const doubleCount = computed(() => count.value * 2)
+
+    // => Property 'split' does not exist on type 'number'
+    // 所以这个时候doubleCount已经有了自己的类型了，自行推断出来的。
+    const result = doubleCount.value.split('') 
+  }
+})
 ```
 
 
