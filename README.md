@@ -4168,6 +4168,7 @@ interface Book {
 export default defineComponent({
   name: 'HelloWorld',
   setup() {
+  <!-- ts中定义数组的方法有 let a:string[] 或者 let a:Array<string>  let b:Array<number>-->
     const book = reactive<Book>({ title: 'Vue 3 Guide' })
     // or
     const book: Book = reactive({ title: 'Vue 3 Guide' })
@@ -4194,6 +4195,32 @@ export default defineComponent({
     const result = doubleCount.value.split('') 
   }
 })
+
+## 为事件处理器添加类型
+在处理原生DOM事件的时候，正确地为处理函数的参数添加类型或许会是有用的。
+让我们看这个例子：
+<template>
+  <input type="text" @change="handleChange" />
+</template>
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    // 'evt' 将会是'any'类型
+    const handleChange = evt => {
+      // 此处TS将抛出异常
+      console.log(evt.target.value)
+    }
+    return { handleChange }
+  }
+})
+</script>
+
+如你所见，在没有为evt参数正确地声明类型的情况下，当我们尝试获取<input>元素的值时
+TypeScript 将抛出异常。解决方案是将事件的目标转换为正确的类型：
+const handleChange = (evt: Event) => {
+  console.log((evt.target as HTMLInputElement).value)
+}
 ```
 
 
