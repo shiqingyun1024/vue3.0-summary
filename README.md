@@ -4222,6 +4222,130 @@ const handleChange = (evt: Event) => {
   console.log((evt.target as HTMLInputElement).value)
 }
 ```
+### 移动端
+```
+介绍
+虽然 Vue.js 本身并不支持移动应用开发，但是有很多解决方案可以用 Vue.js 创建原生 iOS 和 Android 应用。
+
+#混合应用开发
+#Capacitor
+Capacitor 是一个来自 Ionic Team 的项目，通过提供跨多个平台运行的 API，开发者可以使用单个代码库构建原生 iOS、Android 和 PWA 应用。
+
+资源
+
+Capacitor + Vue.js Guide
+#NativeScript
+NativeScript 使用已熟悉的 Web 技能为跨平台（真正的原生）移动应用提供支持。两者结合在一起是开发沉浸式移动体验的绝佳选择。
+
+资源
+
+NativeScript + Vue.js Guide
+```
+### 生产环境部署
+```
+## 开启生产环境模式
+在开发期间，Vue 提供了许多警告，以帮助你处理常见的错误和隐患。但是，这些警告字符串
+在生产环境中会变得无意义，并且会增大应用程序的负担。此外，有一些警告检查还会产生些
+许的运行时开销，在生产模式下可以避免这些开销。
+
+## 不使用构建工具
+如果你正在使用完整的构建版本，即直接通过脚本标签引入 Vue，而不使用构建工具，
+那么请确保在生产环境中使用压缩版。这可以在安装指南中找到。
+
+## 使用构建工具
+当使用 Webpack 或 Browserify 这样的构建工具时，生产环境模式将由 Vue 的源代码中
+的 process.env.NODE_ENV 决定，默认为开发模式。这两种构建工具都提供了重写这个变量
+以启用 Vue 的生产模式的方法，并且在构建过程中警告将被压缩工具删除。Vue CLI 已经为
+你预先配置了这个，不过了解它的工作原理会更好：
+
+Webpack
+在 Webpack 4+，你可以使用 mode 选项：
+
+module.exports = {
+  mode: 'production'
+}
+
+Browserify
+将当前的环境变量 NODE_ENV 设置为 "production" 作为运行的打包命令。它告诉 vueify 避免引入热重载和开发相关的代码。
+
+将一个全局的 envify 转换应用到你的包中。这使得压缩工具可以删除包裹在环境变量条件块
+中的Vue源代码中的所有警告。例如:
+NODE_ENV=production browserify -g envify -e main.js | uglifyjs -c -m > build.js
+
+或者，利用 Gulp 使用 envify
+// Use the envify custom module to specify environment variables
+const envify = require('envify/custom')
+
+browserify(browserifyOptions)
+  .transform(vueify)
+  .transform(
+    // Required in order to process node_modules files
+    { global: true },
+    envify({ NODE_ENV: 'production' })
+  )
+  .bundle()
+
+  或者，利用 Grunt 和 grunt-browserify 使用 envify：
+// Use the envify custom module to specify environment variables
+const envify = require('envify/custom')
+
+browserify: {
+  dist: {
+    options: {
+      // Function to deviate from grunt-browserify's default order
+      configure: (b) =>
+        b
+          .transform('vueify')
+          .transform(
+            // Required in order to process node_modules files
+            { global: true },
+            envify({ NODE_ENV: 'production' })
+          )
+          .bundle()
+    }
+  }
+}
+
+Rollup
+使用 @rollup/plugin-replace:
+
+const replace = require('@rollup/plugin-replace')
+
+rollup({
+  // ...
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify( 'production' )
+    })
+  ]
+}).then(...)
+
+## 预编译模板
+当使用 DOM 内模板或 JavaScript 内模板字符串时，将动态地执行从模板到渲染函数的编
+译。在大多数情况下，这已经足够快了，但是如果应用程序对性能敏感，最好避免这样做。
+
+预编译模板最简单的方法是使用单文件组件——相关的构建设置自动为你执行预编译，所以构建代
+码包含已经编译的渲染函数，而不是原始的模板字符串。
+
+如果你正在使用 Webpack，并且更喜欢将 JavaScript 和模板文件分开，你可以使用
+ vue-template-loader，它还可以在构建步骤中将模板文件转换为 JavaScript 渲染函
+ 数。
+
+## 提取组件CSS
+当使用单文件组件时，组件内部的 CSS 会通过 JavaScript 以 <style> 标签的形式被动态注入。这有一个小的运行时成本，如果你使用服务器端渲染，它将导致“无样式内容的闪现” 。将所有组件的 CSS 提取到同一个文件中可以避免这些问题，还可以更好地压缩和缓存 CSS。
+
+参考各自的构建工具文档，看看它是如何做的:
+
+Webpack + vue-loader (vue-cli webpack 模板已经预先配置了这个)
+Browserify + vueify
+Rollup + rollup-plugin-vue
+
+## 跟踪运行时错误
+如果在组件渲染期间发生运行时错误，它将被传递到全局的 app.config.errorHandler 配
+置函数，如果它已经被设置。将这个钩子与错误跟踪服务如 Sentry 一起使用可能是一个好主
+意，它为 Vue 提供了一个官方集成。
+```
+
 
 
 
