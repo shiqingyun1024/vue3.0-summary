@@ -4345,6 +4345,13 @@ Rollup + rollup-plugin-vue
 置函数，如果它已经被设置。将这个钩子与错误跟踪服务如 Sentry 一起使用可能是一个好主
 意，它为 Vue 提供了一个官方集成。
 ```
+## API
+### 应用配置
+```
+每个Vue应用都会暴露一个包含其配置项的config对象：
+const app = createApp({})
+console.log(app.config)
+```
 
 
 
