@@ -4351,6 +4351,22 @@ Rollup + rollup-plugin-vue
 每个Vue应用都会暴露一个包含其配置项的config对象：
 const app = createApp({})
 console.log(app.config)
+
+在挂载应用之前，你可以修改下列property
+
+errorHandler
+
+类型：Function
+
+默认：undefined
+
+用法：
+app.config.errorHandler = (err, vm, info) => {
+  // 处理错误
+  // `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+}
+指定一个处理函数，来处理组件渲染函数和侦听器执行期间抛出的未捕获错误。这个处理函数被调用时，
+可获取错误信息和相应的应用实例。
 ```
 
 
