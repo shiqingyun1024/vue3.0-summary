@@ -11,7 +11,7 @@ const twiceTheCounter = computed(() => counter.value*2)
 counter.value++
 console.log(counter.value);
 console.log(twiceTheCounter.value); // 注意computed返回的值要用value
-
+console.log(a+b);
 </script>
 
 <style scoped lang="scss">
