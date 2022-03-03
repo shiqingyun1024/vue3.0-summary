@@ -4397,6 +4397,23 @@ Vue.prototype.$http = () => {}
 const app = createApp({})
 app.config.globalProperties.$http = () => {}
 
+**注意点：通过下面这种方式可以获取在全局定义的变量。**
+<script lang="ts" setup>
+import { defineProps, getCurrentInstance } from "vue";
+const props = defineProps({
+  msg: {
+    type: String,
+    default: "HelloWorld",
+  },
+});
+const internalInstance = getCurrentInstance()  // 有效 全局
+// 通过下面这种方式可以获取在全局定义的变量
+const globalProperties = internalInstance?.appContext.config.globalProperties; // 通过这种方式可以获取在
+console.log(getCurrentInstance());
+console.log(globalProperties.$selfmsg);
+
+</script>
+
 ```
 
 
