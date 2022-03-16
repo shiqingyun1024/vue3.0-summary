@@ -29,10 +29,12 @@
        })
        function effect(){
            console.log('effect');
-           document.body.innerText = obj.innerText
+           // obj.innerText 千万别写成了 text.innerText，这里使用的是代理之后的数据obj
+           document.body.innerText = obj.innerText 
        }
        effect()
        setTimeout(()=>{
+        // obj.innerText 千万别写成了 text.innerText，这里使用的是代理之后的数据obj
         obj.innerText = 'hello vue3'
        },2000)
    </script>
